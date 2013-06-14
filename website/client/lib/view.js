@@ -7,16 +7,9 @@
  */
 View = {
   /**
-   * @param {View
+   * @protected
    */
-  init: function(view) {
-    _.extend(view, View);
-    view.setupRoute_();
-  },
-  /**
-   * @private
-   */
-  setupRoute_: function() {
+  init_: function() {
     this.template = Template[this.name];
     window.router.addRoute(this.name, _.bind(this.render, this), this.template,
      _.bind(this.pathGenerator_, this));
@@ -25,12 +18,13 @@ View = {
    * Let the view know it's being rendered.
    * @param {Object} state
    * @param {*=} opt_args
+   * @protected
    */
   render: function(state, opt_args) {
   },
   /**
    * Generate a path for a view.
-   * @private
+   * @protected
    * @return {string}
    */
   pathGenerator_: function() {

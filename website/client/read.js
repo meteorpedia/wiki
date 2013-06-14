@@ -9,14 +9,24 @@ var RP;
  * @extends {View}
  */
 function Read_() {
-  View.init(this);
+  this.init_();
 }
+Read_.prototype = _.clone(View);
 RP = Read_.prototype;
 
 /**
  * @type {string}
  */
 RP.name = 'read';
+
+/**
+ * @param {string} pageName
+ * @protected
+ * @return {string}
+ */
+RP.pathGenerator_ = function(pageName) {
+  return [this.name, pageName].join('/');
+};
 
 Read = Read_;
 

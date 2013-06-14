@@ -9,8 +9,9 @@ var EP;
  * @extends {View}
  */
 function Edit_() {
-  View.init(this);
+  this.init_();
 }
+Edit_.prototype = _.clone(View);
 EP = Edit_.prototype;
 
 /**

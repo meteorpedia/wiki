@@ -9,8 +9,9 @@ var TP;
  * @extends {View}
  */
 function Talk_() {
-  View.init(this);
+  this.init_();
 }
+Talk_.prototype = _.clone(View);
 TP = Talk_.prototype;
 
 /**

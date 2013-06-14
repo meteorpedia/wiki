@@ -47,15 +47,22 @@ routes = {};
 
 
 /**
+ * @param {string} defaultRouteName
+ * @param {Array=} opt_defaultRouteArgs
  * @constructor
  */
-function Router_() {
+function Router_(defaultRouteName, opt_defaultRouteArgs) {
   window.router = this;
   /**
-   * @param {string}
+   * @type {string}
    * @private
    */
-  this.defaultPath_ = null;
+  this.defaultRouteName_ = defaultRouteName;
+  /**
+   * @type {Array}
+   * @private
+   */
+  this.defaultRouteArgs_ = opt_defaultRouteArgs || [];
   window.addEventListener('popstate', _.bind(this.handlePop_, this));
 }
 RP = Router_.prototype;
@@ -73,25 +80,27 @@ RP.addRoute = function(routeName, pathGenerator, template, callback) {
 /**
  * @param {string} routeName
  * @param {Array} pathGenArgs
+ * @param {Array} callbackArgs
  * @param {Object=} opt_state
+ * @param {boolean=} opt_replace
  */
-RP.run = function(routeName, pathGenArgs, opt_state) {
+RP.run = function(routeName, pathGenArgs, callbackArgs, opt_state,
+    opt_replace) {
   var route, state;
   route = routes[routeName];
   state = {routeName: routeName};
   if (_.isObject(opt_state)) {
     state = _.extend(state, opt_state);
   }
-  history.push(state, routeName, route.pathGenerator.apply(route, pathGenArgs));
+  if (opt_replace === true) {
+    history.replaceState(state, routeName,
+      route.pathGenerator.apply(route, pathGenArgs));
+  } else {
+    history.pushState(state, routeName,
+      route.pathGenerator.apply(route, pathGenArgs));
+  }
   this.runTemplate(routeName, route.callback, callbackArgs);
 }
-
-/**
- * @param {string} defaultPath
- */
-RP.setDefaultPath = function(defaultPath) {
-  this.defaultPath_ = defaultPath;
-};
 
 /**
  * @param {string} routeName
@@ -124,16 +133,20 @@ RP.handlePop_ = function(event) {
   var state, route, path, paths, routeName;
   state = event.state || {};
   path = window.location.pathname || '';
-  if (!path) {
-    if (!this.defaultPath_) {
-      return;
-    }
-    path = this.defaultPath_;
-  }
   path = path.substr(1);
+  if (!path) {
+    if (this.defaultRouteName_ && this.defaultRouteArgs_) {
+      this.run(this.defaultRouteName_, this.defaultRouteArgs_, [], {}, true);
+    }
+    return;
+  }
   paths = path.split('/');
   routeName = _.first(paths);
   route = routes[routeName];
+  if (!route) {
+    //TODO: add a 404 page.
+    return;
+  }
   this.runTemplate(routeName, route.callback, paths, state);
 };
 
