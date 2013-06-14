@@ -1,24 +1,14 @@
 Deps.autorun(function () {
-    Meteor.subscribe('userOrg', Meteor.userId());
-    Meteor.subscribe('userProfile', Meteor.userId());
 });
 
-/**
- * @return {boolean}
- */
-Template.body.isLoggedIn = function() {
-  return !!Meteor.userId();
-};
+var views = [];
 
-/**
- * @return {boolean}
- */
-Template.entry.isSetup = function() {
-  var org, profile;
-  org = Orgs.findOne({userId: Meteor.userId()});
-  if (org) {
-    return true;
-  }
-  return !!Profiles.findOne({userId: Meteor.userId});
-};
+function main() {
+  var r;
+  r = new Router();
+  views.push(new Read());
+  views.push(new Edit());
+  views.push(new Talk());
+}
 
+Meteor.startup(main);

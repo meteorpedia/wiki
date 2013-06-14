@@ -1,0 +1,26 @@
+<head>
+  <title>sphela</title>
+</head>
+
+<body>
+  {{>header}}
+  {{>body}}
+  {{>footer}}
+</body>
+
+<template name="header">
+  <div class="header">
+    {{loginButtons}}
+  </div>
+</template>
+
+<template name="footer">
+</template>
+
+<template name="body">
+ {{> main}}
+</template>
+
+<template name="main">
+  {{{content}}}
+</template>
