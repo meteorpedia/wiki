@@ -1,5 +1,4 @@
 <head>
-  <title>sphela</title>
 </head>
 
 <body>
@@ -8,9 +7,20 @@
   {{>footer}}
 </body>
 
+<template name="pageTitle">
+  {{siteName}} - {{pageName}}
+</template>
+
 <template name="header">
-  <div class="header">
-    {{loginButtons}}
+  <div class="container header">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <a class="brand" href="/">{{>pageTitle}}</a>
+        <div class="pull-right">
+          {{loginButtons}}
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -18,7 +28,9 @@
 </template>
 
 <template name="body">
- {{> main}}
+  <div class="container">
+    {{> main}}
+ </div>
 </template>
 
 <template name="main">

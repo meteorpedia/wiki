@@ -49,9 +49,11 @@ routes = {};
 /**
  * @param {string} defaultRouteName
  * @param {Array=} opt_defaultRouteArgs
+ * @param {Array=} opt_defaultCallbackArgs
  * @constructor
  */
-function Router_(defaultRouteName, opt_defaultRouteArgs) {
+function Router_(defaultRouteName, opt_defaultRouteArgs,
+    opt_defaultCallbackArgs) {
   window.router = this;
   /**
    * @type {string}
@@ -63,6 +65,11 @@ function Router_(defaultRouteName, opt_defaultRouteArgs) {
    * @private
    */
   this.defaultRouteArgs_ = opt_defaultRouteArgs || [];
+  /**
+   * @type {Array}
+   * @private
+   */
+  this.defaultCallbackArgs_ = opt_defaultCallbackArgs || [];
   window.addEventListener('popstate', _.bind(this.handlePop_, this));
 }
 RP = Router_.prototype;
@@ -108,8 +115,8 @@ RP.run = function(routeName, pathGenArgs, callbackArgs, opt_state,
  * @param {Array} callbackArgs
  * @param {Object} state
  */
-RP.runTemplate = function(routeName, callback, callbackArgs, state) {
-  callback.call(null, state, callbackArgs);
+RP.runTemplate = function(routeName, callback, callbackArgs) {
+  callback.apply(null, callbackArgs);
   Session.set(ROUTE_SESSION_KEY, ''); // Force session update.
   Session.set(ROUTE_SESSION_KEY, routeName);
 };
@@ -130,13 +137,14 @@ Template.main.content = function() {
  * @private
  */
 RP.handlePop_ = function(event) {
-  var state, route, path, paths, routeName;
+  var state, route, path, paths, routeName, args;
   state = event.state || {};
   path = window.location.pathname || '';
   path = path.substr(1);
   if (!path) {
     if (this.defaultRouteName_ && this.defaultRouteArgs_) {
-      this.run(this.defaultRouteName_, this.defaultRouteArgs_, [], {}, true);
+      this.run(this.defaultRouteName_, this.defaultRouteArgs_,
+        this.defaultCallbackArgs_, {}, true);
     }
     return;
   }
@@ -147,7 +155,8 @@ RP.handlePop_ = function(event) {
     //TODO: add a 404 page.
     return;
   }
-  this.runTemplate(routeName, route.callback, paths, state);
+  args = [state].concat(paths);
+  this.runTemplate(routeName, route.callback, args);
 };
 
 
