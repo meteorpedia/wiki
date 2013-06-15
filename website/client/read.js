@@ -36,6 +36,7 @@ RP.pathGenerator_ = function(pageName) {
  */
 RP.render = function(state, viewName, pageName) {
   Session.set(SESSION_PAGE_NAME_KEY, pageName);
+  Session.set(SESSION_PAGE_TYPE, viewName);
 };
 
 Read = Read_;

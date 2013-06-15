@@ -19,5 +19,25 @@ TP = Talk_.prototype;
  */
 TP.name = 'talk';
 
+/**
+ * @param {string} pageName
+ * @protected
+ * @return {string}
+ */
+TP.pathGenerator_ = function(pageName) {
+  return [this.name, pageName].join('/');
+};
+
+/**
+ * @param {Object} state
+ * @param {string} viewName
+ * @param {string} pageName
+ * @protected
+ */
+TP.render = function(state, viewName, pageName) {
+  Session.set(SESSION_PAGE_NAME_KEY, pageName);
+  Session.set(SESSION_PAGE_TYPE, viewName);
+};
+
 Talk = Talk_;
 

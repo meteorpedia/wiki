@@ -34,7 +34,6 @@ Template.header.title = function() {
  * @return {string}
  */
 Template.pageTitle.pageName = function() {
-  console.log('eh?', Session.get(SESSION_PAGE_NAME_KEY));
   return formattedPageName();
 };
 

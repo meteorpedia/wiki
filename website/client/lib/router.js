@@ -101,10 +101,10 @@ RP.run = function(routeName, pathGenArgs, callbackArgs, opt_state,
   }
   if (opt_replace === true) {
     history.replaceState(state, routeName,
-      route.pathGenerator.apply(route, pathGenArgs));
+      '/' + route.pathGenerator.apply(route, pathGenArgs));
   } else {
     history.pushState(state, routeName,
-      route.pathGenerator.apply(route, pathGenArgs));
+      '/' + route.pathGenerator.apply(route, pathGenArgs));
   }
   this.runTemplate(routeName, route.callback, callbackArgs);
 }

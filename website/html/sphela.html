@@ -17,11 +17,29 @@
       <div class="navbar-inner">
         <a class="brand" href="/">{{>pageTitle}}</a>
         <div class="pull-right">
-          {{loginButtons}}
+          {{>pageMenu}}
         </div>
       </div>
     </div>
   </div>
+</template>
+
+<template name="pageMenu">
+  <ul class="nav">
+    <li {{#if isRead}}class="active"{{/if}}>
+    <a data-link="read" href="/read/{{pageName}}">Read</a>
+    </li>
+    <li  {{#if isEdit}}class="active"{{/if}}>
+      <a data-link="edit" href="/edit/{{pageName}}">Edit</a>
+    </li>
+    <li  {{#if isTalk}}class="active"{{/if}}>
+      <a data-link="talk" href="/talk/{{pageName}}">Discuss</a>
+    </li>
+    <li class="divider-vertical"></li>
+    <li>
+          {{loginButtons}}
+    </li>
+</ul>
 </template>
 
 <template name="footer">
