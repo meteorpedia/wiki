@@ -41,4 +41,10 @@ HP.render = function(state, viewName, pageName) {
 
 History = History_;
 
+/**
+ * return {string}
+ */
+Template.history.pageTitle = function() {
+  return formattedPageName();
+};
 

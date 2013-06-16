@@ -1,3 +1,21 @@
 <template name="history">
-  History.
+  <div class="history">
+    <h1>{{pageTitle}}</h1>
+    <table class="table table-striped">
+      <thead>
+        <th>Date</th>
+        <th>Who</th>
+        <th>Comment</th>
+      </thead>
+      <tbody>
+        {{#each edits}}
+        <tr>
+          <td>{{date}}</td>
+          <td>{{who}}</td>
+          <td>{{comment}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
 </template>
