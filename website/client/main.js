@@ -17,6 +17,7 @@ function main() {
   views.push(new Read());
   views.push(new Edit());
   views.push(new Talk());
+  views.push(new History());
 }
 
 Deps.autorun(function() {

@@ -1,4 +1,4 @@
-sphela
+sphela-wiki
 ======
 
-Communications, issues and project management for organizations and teams.
+A wiki built in meteor.js
