@@ -48,3 +48,20 @@ Template.history.pageTitle = function() {
   return formattedPageName();
 };
 
+/**
+ * @return {Array}
+ */
+Template.history.edits = function() {
+  var edits;
+  edits = [];
+  WikiEdits.find({pageId: pageId()}).forEach(function(edit) {
+    edits.push({
+      date: new Date(edit.ts).toLocaleString(),
+      createdBy: edit.createdBy,
+      publishedBy: edit.publishedBy,
+      comment: edit.comment
+    });
+  });
+  return edits;
+};
+

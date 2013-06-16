@@ -4,14 +4,16 @@
     <table class="table table-striped">
       <thead>
         <th>Date</th>
-        <th>Who</th>
+        <th>Created by</th>
+        <th>Published by</th>
         <th>Comment</th>
       </thead>
       <tbody>
         {{#each edits}}
         <tr>
           <td>{{date}}</td>
-          <td>{{who}}</td>
+          <td>{{createdBy}}</td>
+          <td>{{publishedBy}}</td>
           <td>{{comment}}</td>
         </tr>
         {{/each}}
