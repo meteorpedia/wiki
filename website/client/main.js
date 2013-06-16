@@ -23,6 +23,18 @@ Deps.autorun(function() {
   document.title = [formattedPageName(), '-', SITE_NAME].join(' ');
 });
 
+Deps.autorun(function() {
+  Meteor.subscribe('currentPage', pageName());
+});
+
+Deps.autorun(function() {
+  var page;
+  page = WikiPages.findOne({name: pageName()});
+  if (page) {
+    Session.set(SESSION_PAGE_ID, page._id);
+  }
+});
+
 /**
  * @return {string}
  */

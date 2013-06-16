@@ -15,6 +15,12 @@ SESSION_PAGE_NAME_KEY = 'currentPage';
 SESSION_PAGE_TYPE = 'pageType';
 
 /**
+ * @type {string}
+ * @const
+ */
+SESSION_PAGE_ID = 'pageId';
+
+/**
  * @return {string}
  */
 function pageName_() {
@@ -39,3 +45,11 @@ function pageType_() {
   return Session.get(SESSION_PAGE_TYPE);
 }
 pageType = pageType_;
+
+/**
+ * @return {string}
+ */
+function pageId_() {
+  return Session.get(SESSION_PAGE_ID);
+}
+pageId = pageId_;

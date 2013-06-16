@@ -1,4 +1,12 @@
 <template name="read">
-<h1>Read.</h1>
-{{text}}
+  <h1>{{pageTitle}}</h1>
+  {{#if pageExists}}
+    {{text}}
+  {{else}}
+    <div class="alert">
+      This page does not exist, but you can
+      <a class="internal-link" data-name="{{pageName}}"
+        data-link="edit" href="/edit/{{pageName}}">create</a> it.
+    </div>
+  {{/if}}
 </template>

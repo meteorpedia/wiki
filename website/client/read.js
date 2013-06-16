@@ -41,6 +41,41 @@ RP.render = function(state, viewName, pageName) {
 
 Read = Read_;
 
+/**
+ * @return {string}
+ */
 Template.read.text = function() {
   return 'This is text.';
 };
+
+/**
+ * @return {string}
+ */
+Template.read.pageTitle = function() {
+  return formattedPageName();
+};
+
+/**
+ * @return {string}
+ */
+Template.read.pageName = function() {
+  return pageName();
+};
+
+/**
+ * @return {boolean}
+ */
+Template.read.pageExists = function() {
+  var p;
+  p = WikiPages.findOne({_id: pageId()});
+  if (!p) {
+    return false;
+  }
+  return !!WikiEdits.findOne({_id: p.lastEditId});
+};
+
+Template.read.events({
+  'click a.internal-link': function(event) {
+    handleInternalClick(event);
+  }
+});

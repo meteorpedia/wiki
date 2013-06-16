@@ -27,13 +27,13 @@
 <template name="pageMenu">
   <ul class="nav">
     <li {{#if isRead}}class="active"{{/if}}>
-    <a data-link="read" href="/read/{{pageName}}">Read</a>
+    <a data-link="read" data-name="{{pageName}}" href="/read/{{pageName}}">Read</a>
     </li>
     <li  {{#if isEdit}}class="active"{{/if}}>
-      <a data-link="edit" href="/edit/{{pageName}}">Edit</a>
+    <a data-link="edit" data-name="{{pageName}}" href="/edit/{{pageName}}">Edit</a>
     </li>
     <li  {{#if isTalk}}class="active"{{/if}}>
-      <a data-link="talk" href="/talk/{{pageName}}">Discuss</a>
+    <a data-link="talk" data-name="{{pageName}}" href="/talk/{{pageName}}">Discuss</a>
     </li>
     <li class="divider-vertical"></li>
     <li>

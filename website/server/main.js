@@ -1,14 +1,23 @@
+var RECENT_EDIT_LIMIT
+
+/**
+ * @type {number}
+ * @const
+ */
+RECENT_EDIT_LIMIT = 10;
+
 Meteor.startup(function () {
   console.log('Starting server.');
   startPublish();
 });
 
 function startPublish() {
-  Meteor.publish('userOrg', function(userId) {
-    return Orgs.findOne({userId: userId});
+  Meteor.publish('currentPage', function(pageName) {
+    return WikiPages.findOne({name: pageName});
   });
-  Meteor.publish('userProfile', function(userId) {
-    return Profiles.findOne({userId: userId});
+  Meteor.publish('recentEdits', function(pageId) {
+    return WikiEdits.find({pageId: pageId}, {sort: {ts: -1},
+      limit: RECENT_EDIT_LIMIT})
   });
 }
 

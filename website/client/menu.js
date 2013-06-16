@@ -5,16 +5,18 @@
 /**
  * @param {Object} event
  */
-function handleClick(event) {
-  var pageType, name;
+function handleInternalClick_(event) {
+  var pageType, name, el;
   event.preventDefault();
-  pageType = $(event.target).attr('data-link');
-  name = pageName();
+  el = $(event.target);
+  pageType = el.attr('data-link');
+  name = el.attr('data-name');
   window.router.run(pageType, [name], [{}, pageType, name]);
 }
+handleInternalClick = handleInternalClick_;
 
 Template.pageMenu.events({
-  'click a': handleClick
+  'click a': handleInternalClick_
 });
 
 /**
