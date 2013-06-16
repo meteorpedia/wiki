@@ -18,9 +18,43 @@
             {{#if cantEdit}}disabled="disabled"{{/if}}
             class="edit-form-control edit-contents-textarea span8"
             >{{lastEdit.content}}</textarea>
-          <span class="span3 pull-right">
-            Use markdown to format your wiki page content.
-          </span>
+          <div class="span3 pull-right">
+            <div class="row">
+              <span class="span3">
+                Use
+                <a href="http://daringfireball.net/projects/markdown/syntax"
+                  target="_blank" >markdown</a>
+                to format your wiki page content.
+                <br/>
+                <br/>
+              </span>
+            </div>
+            <div class="row">
+              <span class="span3">
+                Internal links to other pages on this wiki should be formatted
+                as such:
+                <br/>
+                <br/>
+                <pre>[Some text](/read/Some_text/)</pre>
+                <br/>
+              </span>
+            </div>
+            <div class="row">
+              <span class="span3">
+                You can use 
+                <a href="https://help.github.com/articles/github-flavored-markdown"
+                  target="_blank">Github flavored markdown</a>
+                for JavaScript syntax highlighting:
+                <br/>
+                <br/>
+                <pre>```js
+function helloWorld() {
+  alert('Hello World!');
+}
+```</pre>
+              </span>
+            </div>
+          </div>
         </div>
         <div class="row">
           <input class="edit-form-control btn btn-success" type="submit"
