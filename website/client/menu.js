@@ -16,7 +16,7 @@ function handleInternalClick_(event) {
 handleInternalClick = handleInternalClick_;
 
 Template.pageMenu.events({
-  'click a': handleInternalClick_
+  'click a.internal-link': handleInternalClick_
 });
 
 /**

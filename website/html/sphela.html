@@ -12,12 +12,14 @@
 </template>
 
 <template name="header">
-  <div class="container header">
-    <div class="navbar">
+  <div class="header">
+    <div class="navbar navbar-inverse navbar-static-top">
       <div class="navbar-inner">
-        <a class="brand" href="/">{{>pageTitle}}</a>
-        <div class="pull-right">
-          {{>pageMenu}}
+        <div class="container">
+          <a class="brand" href="/">{{>pageTitle}}</a>
+          <div class="pull-right">
+            {{>pageMenu}}
+          </div>
         </div>
       </div>
     </div>
@@ -26,13 +28,13 @@
 
 <template name="pageMenu">
   <ul class="nav">
-    <li {{#if isRead}}class="active"{{/if}}>
+    <li class="internal-link{{#if isRead}} active{{/if}}">
     <a data-link="read" data-name="{{pageName}}" href="/read/{{pageName}}">Read</a>
     </li>
-    <li  {{#if isEdit}}class="active"{{/if}}>
+    <li class="internal-link{{#if isEdit}} active{{/if}}">
     <a data-link="edit" data-name="{{pageName}}" href="/edit/{{pageName}}">Edit</a>
     </li>
-    <li  {{#if isTalk}}class="active"{{/if}}>
+    <li class="internal-link{{#if isTalk}} active{{/if}}">
     <a data-link="talk" data-name="{{pageName}}" href="/talk/{{pageName}}">Discuss</a>
     </li>
     <li class="divider-vertical"></li>

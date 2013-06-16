@@ -1,4 +1,15 @@
 <template name="edit">
-Edit.
+  <h1>{{pageTitle}}</h1>
+
+  <form class="well">
+    <div>
+      <textarea class="edit-contents-textarea">
+      {{contents}}
+      </textarea>
+    </div>
+    <div>
+      <input class="btn btn-success" type="submit" value="{{buttonName}}" />
+    </div>
+  </form>
 </template>
 

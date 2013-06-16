@@ -41,3 +41,23 @@ EP.render = function(state, viewName, pageName) {
 
 Edit = Edit_;
 
+/**
+ * return {string}
+ */
+Template.edit.pageTitle = function() {
+  return formattedPageName();
+};
+
+/**
+ * @return {string}
+ */
+Template.edit.buttonName = function() {
+  var p, buttonName;
+  p = WikiPages.findOne({_id: pageId()});
+  if (p) {
+    if (WikiEdits.findOne({_id: p.lastEditId})) {
+      return 'Save';
+    }
+  }
+  return 'Create';
+};
