@@ -42,10 +42,15 @@ RP.render = function(state, viewName, pageName) {
 Read = Read_;
 
 /**
- * @return {string}
+ * @return {Object}
  */
-Template.read.text = function() {
-  return 'This is text.';
+Template.read.lastEdit = function() {
+  var p;
+  p = WikiPages.findOne(pageId());
+  if (!p || !p.lastEditId) {
+    return {};
+  }
+  return WikiEdits.findOne(p.lastEditId);
 };
 
 /**
@@ -68,6 +73,7 @@ Template.read.pageName = function() {
 Template.read.pageExists = function() {
   var p;
   p = WikiPages.findOne({_id: pageId()});
+  console.log('pageExists', pageId(), p);
   if (!p) {
     return false;
   }

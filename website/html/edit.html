@@ -1,15 +1,35 @@
 <template name="edit">
-  <h1>{{pageTitle}}</h1>
+  <div class="edit">
+    <h1>{{pageTitle}}</h1>
 
-  <form class="well">
-    <div>
-      <textarea class="edit-contents-textarea">
-      {{contents}}
-      </textarea>
-    </div>
-    <div>
-      <input class="btn btn-success" type="submit" value="{{buttonName}}" />
-    </div>
-  </form>
+    {{#if cantEdit}}
+      <div class="alert">
+        Only registered users can edit wiki content.
+      </div>
+    {{/if}}
+    {{#if hasPreviousError}}
+      <div class="alert alert-error">
+        {{previousErrorDescription}}
+      </div>
+    {{/if}}
+    {{#constant}}
+      <form class="well">
+        <div class="row">
+          <textarea tabindex="1" id="edit-contents"
+            {{#if cantEdit}}disabled="disabled"{{/if}}
+            class="edit-form-control edit-contents-textarea span8"
+            >{{lastEdit.content}}</textarea>
+          <span class="span3 pull-right">
+            Use markdown to format your wiki page content.
+          </span>
+        </div>
+        <div class="row">
+          <input class="edit-form-control btn btn-success" type="submit"
+            {{#if cantEdit}}disabled="disabled"{{/if}}
+            value="{{buttonName}}" tabindex="2"/>
+        </div>
+      </form>
+    {{/constant}}
+  </div>
 </template>
 

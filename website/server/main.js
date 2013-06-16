@@ -13,7 +13,7 @@ Meteor.startup(function () {
 
 function startPublish() {
   Meteor.publish('currentPage', function(pageName) {
-    return WikiPages.findOne({name: pageName});
+    return WikiPages.find({name: pageName});
   });
   Meteor.publish('recentEdits', function(pageId) {
     return WikiEdits.find({pageId: pageId}, {sort: {ts: -1},

@@ -25,6 +25,7 @@ Deps.autorun(function() {
 
 Deps.autorun(function() {
   Meteor.subscribe('currentPage', pageName());
+  Meteor.subscribe('recentEdits', pageId());
 });
 
 Deps.autorun(function() {
