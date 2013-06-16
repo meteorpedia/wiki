@@ -13,11 +13,16 @@ Meteor.startup(function () {
 
 function startPublish() {
   Meteor.publish('currentPage', function(pageName) {
-    return WikiPages.find({name: pageName});
+    var p;
+    console.log('currentPage', pageName);
+    p = WikiPages.find({name: pageName});
+    return p;
   });
   Meteor.publish('recentEdits', function(pageId) {
-    return WikiEdits.find({pageId: pageId}, {sort: {ts: -1},
-      limit: RECENT_EDIT_LIMIT})
+    var edits;
+    edits = WikiEdits.find({pageId: pageId}, {sort: {ts: -1},
+      limit: RECENT_EDIT_LIMIT});
+    return edits;
   });
 }
 

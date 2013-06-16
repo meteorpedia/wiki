@@ -13,7 +13,7 @@ Meteor.methods({
  * @return {boolean}
  */
 function submitEdit(pageId, pageName, content) {
-  var hash, md5sum, edit, page, ts;
+  var hash, md5sum, edit, page, ts, formattedContent;
   if(_.isNull(this.userId)) {
     return {success: false, error: 'Not logged in.'};
   }
@@ -45,11 +45,13 @@ function submitEdit(pageId, pageName, content) {
     WikiPages.update(page._id, page);
     return {success: true};
   }
+  formattedContent = formatContent(content);
   edit = {
     createdBy: this.userId,
     publishedBy: this.userId,
     hash: hash,
     content: content,
+    formattedContent: formattedContent,
     ts: ts
   }
   if (!pageId) {
@@ -57,11 +59,12 @@ function submitEdit(pageId, pageName, content) {
       // If no pageId but page name exists, fail, because wtf.
       return {success: false, error: 'Page already exists. Edit that one.'};
     }
-    page = WikiPages.insert({
+    page = {
       name: pageName,
       createdBy: this.userId,
       createdOn: ts
-    });
+    };
+    page._id = WikiPages.insert(page);
   } else {
     page.lastUpdated = ts;
     WikiPages.update(page._id, page);
@@ -72,4 +75,12 @@ function submitEdit(pageId, pageName, content) {
   page.lastUpdated = ts;
   WikiPages.update(page._id, page);
   return {success: true};
+}
+
+/**
+ * @param {string}
+ * @return {string}
+ */
+function formatContent(content) {
+  return marked(content);
 }

@@ -54,6 +54,19 @@ Template.read.lastEdit = function() {
 };
 
 /**
+ * @return {boolean}
+ */
+Template.read.hasFormattedContents = function() {
+  var p, edit;
+  p = WikiPages.findOne(pageId());
+  if (!p || !p.lastEditId) {
+    return false;
+  }
+  edit = WikiEdits.findOne(p.lastEditId);
+  return edit ? !!edit.formattedContent : false;
+};
+
+/**
  * @return {string}
  */
 Template.read.pageTitle = function() {

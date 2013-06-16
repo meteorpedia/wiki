@@ -1,7 +1,11 @@
 <template name="read">
   <h1>{{pageTitle}}</h1>
   {{#if pageExists}}
-    {{{lastEdit.content}}}
+    {{#if hasFormattedContents}}
+      {{{lastEdit.formattedContent}}}
+    {{else}}
+      {{lastEdit.content}}
+    {{/if}}
   {{else}}
     <div class="alert">
       This page does not exist, but you can
