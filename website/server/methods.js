@@ -12,13 +12,22 @@ Meteor.methods({
 /**
  * @return {boolean}
  */
-function submitEdit(pageId, pageName, content) {
+function submitEdit(pageId, pageName, content, comment) {
   var hash, md5sum, edit, page, ts, formattedContent;
   if(_.isNull(this.userId)) {
     return {success: false, error: 'Not logged in.'};
   }
-  if (_.isEmpty(content)) {
+  content = content.trim();
+  pageName = pageName.trim();
+  comment = comment.trim();
+  if (!_.isString(content) || _.isEmpty(content)) {
     return {success: false, error: 'Empty content submitted.'};
+  }
+  if (!_.isString(pageName) || _.isEmpty(pageName)) {
+    return {success: false, error: 'No page name given.'};
+  }
+  if (!_.isString(comment) || _.isEmpty(comment)) {
+    comment = 'No comment.';
   }
   if (pageId) {
     page = WikiPages.findOne(pageId);
@@ -28,8 +37,6 @@ function submitEdit(pageId, pageName, content) {
     }
   }
   ts = new Date().getTime();
-  content = content.trim();
-  pageName = pageName.trim();
   md5sum = crypto.createHash('md5');
   md5sum.update(content);
   hash = md5sum.digest('hex');
@@ -50,6 +57,7 @@ function submitEdit(pageId, pageName, content) {
     createdBy: this.userId,
     publishedBy: this.userId,
     hash: hash,
+    comment: comment,
     content: content,
     formattedContent: formattedContent,
     ts: ts

@@ -116,7 +116,7 @@ Template.edit.events({
  * @param {Object} event
  */
 function handleSubmit(event) {
-  var text, uid, id, name;
+  var text, uid, id, name, comment;
   event.preventDefault();
   uid = Meteor.userId();
   if (_.isNull(uid)) {
@@ -128,7 +128,8 @@ function handleSubmit(event) {
   }
   id = pageId();
   text = $('#edit-contents').val();
-  Meteor.call('edit', id, name, text, handleEditResponse);
+  comment = $('#edit-comment-input').val();
+  Meteor.call('edit', id, name, text, comment, handleEditResponse);
 }
 
 /**

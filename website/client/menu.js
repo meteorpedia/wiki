@@ -36,6 +36,13 @@ Template.pageMenu.isEdit = function() {
 /**
  * @return {boolean}
  */
+Template.pageMenu.isHistory = function() {
+  return pageType() === 'history';
+};
+
+/**
+ * @return {boolean}
+ */
 Template.pageMenu.isRead = function() {
   return pageType() === 'read';
 };
