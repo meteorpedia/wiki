@@ -9,7 +9,7 @@ views = [];
  * @type {string}
  * @const
  */
-SITE_NAME = 'The Unofficial Meteor Wiki';
+SITE_NAME = 'Meteorpedia';
 
 function main() {
   var r;

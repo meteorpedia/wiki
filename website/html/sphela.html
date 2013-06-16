@@ -8,7 +8,7 @@
 </body>
 
 <template name="pageTitle">
-  {{siteName}} - {{pageName}}
+  {{siteName}}
 </template>
 
 <template name="header">
@@ -27,19 +27,22 @@
 </template>
 
 <template name="pageMenu">
-  <ul class="nav">
-    <li class="internal-link{{#if isRead}} active{{/if}}">
-    <a data-link="read" data-name="{{pageName}}" href="/read/{{pageName}}">Read</a>
+  <ul class="nav page-menu">
+    <li class="{{#if isRead}}active{{/if}}">
+    <a data-link="read" data-name="{{pageName}}" class="internal-link"
+      href="/read/{{pageName}}">Read</a>
     </li>
-    <li class="internal-link{{#if isHistory}} active{{/if}}">
-    <a data-link="history" data-name="{{pageName}}"
+    <li class="{{#if isHistory}}active{{/if}}">
+    <a data-link="history" data-name="{{pageName}}" class="internal-link"
       href="/history/{{pageName}}">History</a>
     </li>
-    <li class="internal-link{{#if isEdit}} active{{/if}}">
-    <a data-link="edit" data-name="{{pageName}}" href="/edit/{{pageName}}">Edit</a>
+    <li class="{{#if isEdit}}active{{/if}}">
+    <a data-link="edit" data-name="{{pageName}}" class="internal-link"
+      href="/edit/{{pageName}}">Edit</a>
     </li>
-    <li class="internal-link{{#if isTalk}} active{{/if}}">
-    <a data-link="talk" data-name="{{pageName}}" href="/talk/{{pageName}}">Discuss</a>
+    <li class="{{#if isTalk}}active{{/if}}">
+    <a data-link="talk" data-name="{{pageName}}" class="internal-link"
+      href="/talk/{{pageName}}">Discuss</a>
     </li>
     <li class="divider-vertical"></li>
     <li>
