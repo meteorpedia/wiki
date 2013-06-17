@@ -1,4 +1,9 @@
-var views, SITE_NAME;
+var activeViews, views, SITE_NAME;
+
+/**
+ * @type {Array.<View>}
+ */
+activeViews = [Read, Edit, Talk, History, EditProfile];
 
 /**
  * @type {Array}
@@ -14,10 +19,9 @@ SITE_NAME = 'Meteorpedia';
 function main() {
   var r;
   r = new Router('read', ['Main_Page'], [{}, 'read', 'Main_Page']);
-  views.push(new Read());
-  views.push(new Edit());
-  views.push(new Talk());
-  views.push(new History());
+  _.each(activeViews, function(view) {
+    views.push(new view());
+  });
 }
 
 Deps.autorun(function() {
@@ -26,7 +30,12 @@ Deps.autorun(function() {
 
 Deps.autorun(function() {
   Meteor.subscribe('currentPage', pageName());
+});
+Deps.autorun(function() {
   Meteor.subscribe('recentEdits', pageId());
+});
+Deps.autorun(function() {
+  Meteor.subscribe('recentMessages', pageId());
 });
 
 Deps.autorun(function() {
@@ -57,5 +66,12 @@ Template.pageTitle.pageName = function() {
 Template.pageTitle.siteName = function() {
   return SITE_NAME;
 };
+
+Template.header.events({
+  'click a.brand': function(event) {
+    event.preventDefault();
+    window.router.run('read', ['Main_Page'], [{}, 'read', 'Main_Page']);
+  }
+});
 
 Meteor.startup(main);

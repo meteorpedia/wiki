@@ -1,0 +1,31 @@
+<template name="edit_profile">
+  <div class="edit-profile">
+    <h1>Edit Profile</h1>
+    <form class="well" id="edit-profile-form">
+      <div class="row">
+        <span class="span8">
+          <label>
+            Profile name: <br/><br/>
+            <input type="text" value="{{profileName}}"
+              class="profile-name-input" tabindex="1"/>
+          </label>
+        </span>
+      </div>
+      <div class="row">
+        <span class="span8">
+          <label>
+            Email: <br/><br/>
+            <input type="text" value="{{email}}"
+              class="profile-email-input" tabindex="2"/>
+          </label>
+        </span>
+      </div>
+      <div class="row">
+        <span class="span8">
+          <input type="submit" class="btn btn-success" value="Save"
+          tabindex="3"/>
+        </span>
+      </div>
+    </form>
+  </div>
+</template>

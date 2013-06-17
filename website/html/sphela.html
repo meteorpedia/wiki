@@ -28,21 +28,27 @@
 
 <template name="pageMenu">
   <ul class="nav page-menu">
-    <li class="{{#if isRead}}active{{/if}}">
-    <a data-link="read" data-name="{{pageName}}" class="internal-link"
-      href="/read/{{pageName}}">Read</a>
-    </li>
-    <li class="{{#if isHistory}}active{{/if}}">
-    <a data-link="history" data-name="{{pageName}}" class="internal-link"
-      href="/history/{{pageName}}">History</a>
-    </li>
-    <li class="{{#if isEdit}}active{{/if}}">
-    <a data-link="edit" data-name="{{pageName}}" class="internal-link"
-      href="/edit/{{pageName}}">Edit</a>
-    </li>
-    <li class="{{#if isTalk}}active{{/if}}">
-    <a data-link="talk" data-name="{{pageName}}" class="internal-link"
-      href="/talk/{{pageName}}">Discuss</a>
+    {{#if isPage}}
+      <li class="{{#if isRead}}active{{/if}}">
+      <a data-link="read" data-name="{{pageName}}" class="internal-link"
+        href="/read/{{pageName}}">Read</a>
+      </li>
+      <li class="{{#if isHistory}}active{{/if}}">
+      <a data-link="history" data-name="{{pageName}}" class="internal-link"
+        href="/history/{{pageName}}">History</a>
+      </li>
+      <li class="{{#if isEdit}}active{{/if}}">
+      <a data-link="edit" data-name="{{pageName}}" class="internal-link"
+        href="/edit/{{pageName}}">Edit</a>
+      </li>
+      <li class="{{#if isTalk}}active{{/if}}">
+      <a data-link="talk" data-name="{{pageName}}" class="internal-link"
+        href="/talk/{{pageName}}">Discuss</a>
+      </li>
+    {{/if}}
+    <li class="{{#if isProfile}}active{{/if}}">
+    <a data-link="edit-profile" class="edit-profile-link"
+      href="/edit_profile">Profile</a>
     </li>
     <li class="divider-vertical"></li>
     <li>

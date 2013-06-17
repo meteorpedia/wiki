@@ -128,6 +128,7 @@ function submitTalk(pageId, message, editId) {
     content: message,
     formattedContent: formatContent(message),
     userId: this.userId,
+    pageId: pageId,
     updated: ts,
     created: ts
   }

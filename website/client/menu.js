@@ -15,15 +15,39 @@ function handleInternalClick_(event) {
 }
 handleInternalClick = handleInternalClick_;
 
+/**
+ * @param {Object} event
+ */
+function handleProfileClick_(event) {
+  event.preventDefault();
+  window.router.run('edit_profile', [{}, 'edit_profile']);
+}
+
 Template.pageMenu.events({
-  'click a.internal-link': handleInternalClick_
+  'click a.internal-link': handleInternalClick_,
+  'click a.edit-profile-link': handleProfileClick_
 });
+
+/**
+ * @return {boolean}
+ */
+Template.pageMenu.isPage = function() {
+  console.log('pageName', pageName());
+  return !!pageName();
+};
 
 /**
  * @return {string}
  */
 Template.pageMenu.pageName = function() {
   return pageName();
+};
+/**
+ * @return {boolean}
+ */
+Template.pageMenu.isProfile = function() {
+  console.log('pt', pageType());
+  return pageType() === 'edit_profile';
 };
 
 /**

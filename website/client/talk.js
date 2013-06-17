@@ -62,6 +62,25 @@ Template.talk.pageTitle = function() {
 };
 
 /**
+ * @return {Array.<Object>}
+ */
+Template.talk.messages = function() {
+  var messages, docs;
+  messages = [];
+  docs = WikiMessages.find({pageId: pageId()}, {sort: {created: -1}});
+  docs.forEach(function(msg) {
+    console.log('msg', msg);
+    messages.push({
+      who: msg.userId,
+      created: new Date(msg.created).toLocaleString(),
+      formattedContent: msg.formattedContent
+    });
+  });
+  console.log('m', messages);
+  return messages;
+};
+
+/**
  * @return {boolean}
  */
 Template.talk.hasError = function() {
@@ -107,6 +126,8 @@ function handleSubmit(event) {
 function handleDiscuss(err, response) {
   if (!err && response.success) {
     $('#discuss-message-textarea').val('');
+    Session.set(SESSION_TALK_ERROR, '');
+    Session.set(SESSION_TALK_EDIT_ID, '');
     return;
   }
   response = response || {};
