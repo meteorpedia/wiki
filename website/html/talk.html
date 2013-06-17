@@ -1,4 +1,33 @@
 <template name="talk">
-Talks.
+  <div class="talk">
+    <h1>{{pageTitle}}</h1>
+    {{#if hasError}}
+    <div class="alert alert-error">
+      {{error}}
+    </div>
+    {{/if}}
+    <div class="row">
+      <div class="span5">
+        <form class="well" id="message-form">
+          <h3>Leave a message</h3>
+          <div>
+            <textarea id="discuss-message-textarea" class="span4"
+              >{{message.contents}}</textarea>
+          </div>
+          <div>
+            <input class="btn btn-success" type="submit" name="Post"/>
+          </div>
+          <div>
+            <small>
+              Comments can be formatted with Github flavored markdown.
+            </small>
+          </div>
+        </form>
+      </div>
+      <div class="span7">
+        <h3>Previous messages</h3>
+      </div>
+    </div>
+  </div>
 </template>
 

@@ -2,7 +2,20 @@
  * @fileOverview The wiki read controller.
  */
 
-var TP;
+var TP, SESSION_TALK_ERROR, SESSION_TALK_EDIT_ID;
+
+/**
+ * @type {string}
+ * @const
+ */
+SESSION_TALK_ERROR = 'talk-error';
+
+/**
+ * @type {string}
+ * @const
+ */
+SESSION_TALK_EDIT_ID = 'talk-edit-id'
+
 
 /**
  * @constructor
@@ -40,4 +53,63 @@ TP.render = function(state, viewName, pageName) {
 };
 
 Talk = Talk_;
+
+/**
+ * @return {string}
+ */
+Template.talk.pageTitle = function() {
+  return formattedPageName();
+};
+
+/**
+ * @return {boolean}
+ */
+Template.talk.hasError = function() {
+  return !!Session.get(SESSION_TALK_ERROR);
+};
+
+/**
+ * @return {string}
+ */
+Template.talk.error = function() {
+  return Session.get(SESSION_TALK_ERROR);
+};
+
+Template.talk.events({
+  'submit form#message-form': handleSubmit
+});
+
+/**
+ * @param {Object} event
+ */
+function handleSubmit(event) {
+  var message, id;
+  event.preventDefault();
+  message = $('#discuss-message-textarea').val();
+  message = $.trim(message);
+  if (_.isEmpty(message)) {
+    Session.set(SESSION_TALK_ERROR, 'Message cannot be empty.');
+    return;
+  }
+  id = pageId();
+  if (!id) {
+    Session.set(SESSION_TALK_ERROR, 'This page has not been created yet.');
+    return;
+  }
+  Session.set(SESSION_TALK_ERROR, '');
+  Meteor.call('talk', id, message, Session.get(SESSION_TALK_EDIT_ID),
+    handleDiscuss);
+}
+
+/**
+ * @param {Object} response
+ */
+function handleDiscuss(err, response) {
+  if (!err && response.success) {
+    $('#discuss-message-textarea').val('');
+    return;
+  }
+  response = response || {};
+  Session.set(SESSION_TALK_ERROR, response.error || 'Failed to send message');
+}
 

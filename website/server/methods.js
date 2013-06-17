@@ -6,10 +6,15 @@ crypto = Npm.require('crypto');
  * @fileOverView A declaration of methods available.
  */
 Meteor.methods({
-  edit: submitEdit
+  edit: submitEdit,
+  talk: submitTalk
 });
 
 /**
+ * @param {string} pageId
+ * @param {string} pageName
+ * @param {string} content
+ * @param {string} comment
  * @return {boolean}
  */
 function submitEdit(pageId, pageName, content, comment) {
@@ -82,6 +87,51 @@ function submitEdit(pageId, pageName, content, comment) {
   page.lastEditId = edit._id;
   page.lastUpdated = ts;
   WikiPages.update(page._id, page);
+  return {success: true};
+}
+
+/**
+ * @param {string} pageId
+ * @param {string} message
+ * @param {string=} editId
+ */
+function submitTalk(pageId, message, editId) {
+  var page, msg, ts;
+  if (!this.userId) {
+    return {success: false, error: 'Must be logged in to discuss.'};
+  }
+  if (!_.isString(pageId) || _.isEmpty(pageId)) {
+    return {success: false, error: 'This page has not been created yet.'};
+  }
+  if (!WikiPages.findOne({_id: pageId})) {
+    return {success: false, error: 'Tried to add a comment to an invalid page.'};
+  }
+  message = message.trim();
+  if (!_.isString(message) || _.isEmpty(message)) {
+    return {success: false, error: 'Message cannot be blank.'};
+  }
+  ts = new Date().getTime();
+  if (editId) {
+    msg = WikiMessages.findOne({_id: editId, pageId: pageId,
+      userId: this.userId});
+    if (!msg) {
+      return {success: false,
+        error: 'Attempted to edit a non-existing message.'};
+    }
+    msg.content = message;
+    msg.formattedContent = formatContent(message);
+    msg.updated = ts;
+    WikiMessages.update(msg._id, msg);
+    return {success: true};
+  }
+  msg = {
+    content: message,
+    formattedContent: formatContent(message),
+    userId: this.userId,
+    updated: ts,
+    created: ts
+  }
+  WikiMessages.insert(msg);
   return {success: true};
 }
 
