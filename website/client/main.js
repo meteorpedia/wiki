@@ -38,12 +38,14 @@ Deps.autorun(function() {
   Meteor.subscribe('recentMessages', pageId());
 });
 
-Deps.autorun(function() {
-  var page;
-  page = WikiPages.findOne({name: pageName()});
-  if (page) {
-    Session.set(SESSION_PAGE_ID, page._id);
-  }
+Meteor.startup(function() {
+  Deps.autorun(function() {
+    var page;
+    page = WikiPages.findOne({name: pageName()});
+    if (page) {
+      Session.set(SESSION_PAGE_ID, page._id);
+    }
+  });
 });
 
 /**

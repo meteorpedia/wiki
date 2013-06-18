@@ -44,11 +44,14 @@
                   </div>
                   <div class="span4">
                     {{> profileLink}}
-                    {{who}}
                   </div>
                 </div>
               </div>
             </div>
+          {{else}}
+          <div class="row no-messages">
+          <p class="span4">No messages.</p>
+          </div>
           {{/each}}
         </div>
       </div>

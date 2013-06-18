@@ -12,8 +12,8 @@
         {{#each edits}}
         <tr>
           <td>{{date}}</td>
-          <td>{{createdBy}}</td>
-          <td>{{publishedBy}}</td>
+          <td>{{#with createdBy}}{{> profileLink}}{{/with}}</td>
+          <td>{{#with publishedBy}}{{> profileLink}}{{/with}}</td>
           <td>{{comment}}</td>
         </tr>
         {{/each}}

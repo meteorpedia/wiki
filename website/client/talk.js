@@ -2,8 +2,7 @@
  * @fileOverview The wiki read controller.
  */
 
-var TP, SESSION_TALK_ERROR, SESSION_TALK_EDIT_ID, SESSION_TALK_USER_MAP,
-    userMapCache;
+var TP, SESSION_TALK_ERROR, SESSION_TALK_EDIT_ID, SESSION_TALK_USER_MAP;
 
 /**
  * @type {string}
@@ -22,12 +21,6 @@ SESSION_TALK_EDIT_ID = 'talk-edit-id';
  * @const
  */
 SESSION_TALK_USER_MAP = 'talk-user-map';
-
-/**
- * @type {Object}
- */
-userMapCache = {};
-
 
 /**
  * @constructor
@@ -66,34 +59,8 @@ TP.render = function(state, viewName, pageName) {
 
 Talk = Talk_;
 
-Deps.autorun(function() {
-  var id;
-  if (pageType() !== TP.name) {
-    Session.set(SESSION_TALK_USER_MAP, {});
-    return;
-  }
-  id = pageId();
-  if (WikiMessages.find({pageId: id}).count() > 0) {
-    if (_.has(userMapCache, id)) {
-      Session.set(SESSION_TALK_USER_MAP, userMapCache[id]);
-    }
-    Meteor.call('talkProfiles', id, handleTalkProfiles);
-  }
-});
-
-/**
- * @param {Object} err
- * @param {Object} response
- */
-function handleTalkProfiles(err, response) {
-  if (err || !response || !response.userMap) {
-    return Session.set(SESSION_TALK_USER_MAP, {});
-  }
-  userMapCache[response.pageId] = response.userMap;
-  if (pageId() === response.pageId) {
-    Session.set(SESSION_TALK_USER_MAP, response.userMap);
-  }
-}
+Deps.autorun(createProfileFetcher(TP.name, SESSION_TALK_USER_MAP,
+  'talkProfiles', WikiMessages));
 
 /**
  * @return {string}

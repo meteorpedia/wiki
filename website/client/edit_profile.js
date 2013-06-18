@@ -47,6 +47,8 @@ EP.pathGenerator_ = function() {
  */
 EP.render = function(state, viewName, pageName) {
   Session.set(SESSION_PAGE_TYPE, viewName);
+  Session.set(SESSION_PROFILE_ERROR, '');
+  Session.set(SESSION_PROFILE_SAVED, '');
 };
 
 EditProfile = EditProfile_;

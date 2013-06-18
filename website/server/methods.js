@@ -1,4 +1,4 @@
-var crypto, WIKI_MESSAGE_LIMIT;
+var crypto, MESSAGE_LIMIT;
 
 crypto = Npm.require('crypto');
 
@@ -6,7 +6,7 @@ crypto = Npm.require('crypto');
  * @type {number}
  * @const
  */
-WIKI_MESSAGE_LIMIT = 50;
+MESSAGE_LIMIT = 300;
 
 /**
  * @fileOverView A declaration of methods available.
@@ -15,7 +15,8 @@ Meteor.methods({
   edit: submitEdit,
   talk: submitTalk,
   profile: submitProfile,
-  talkProfiles: talkProfiles
+  talkProfiles: talkProfiles,
+  historyProfiles: historyProfiles
 });
 
 /**
@@ -179,25 +180,55 @@ function formatContent(content) {
 
 /**
  * @param {string} pageId
+ * @return {Object}
  */
 function talkProfiles(pageId) {
-  var userMap;
+  return profiles(pageId, WikiMessages, MESSAGE_LIMIT, 'created', ['userId']);
+}
+
+/**
+ * @param {string} pageId
+ * @return {Object}
+ */
+function historyProfiles(pageId) {
+  return profiles(pageId, WikiEdits, MESSAGE_LIMIT, 'ts',
+    ['createdBy', 'publishedBy']);
+}
+
+
+/**
+ * @param {string} pageId
+ * @param {Meteor.Collection} collection
+ * @param {number} limit
+ * @param {string} sortField
+ * @param {string} userFields
+ * @return {Object}
+ */
+function profiles(pageId, collection, limit, sortField, userFields) {
+  var userMap, sortInstructions;
+  sortInstructions = {};
+  sortInstructions[sortField] = -1;
   userMap = {};
-  WikiMessages.find({pageId: pageId},
-    {limit: WIKI_MESSAGE_LIMIT, sort: {created: -1}}).forEach(
-    function(msg) {
+  collection.find({pageId: pageId},
+    {limit: limit, sort: sortInstructions}).forEach(
+    function(doc) {
+      var userId;
       var user, profile;
-      if (_.has(userMap, msg.userId)) {
-        return;
-      }
-      user = Meteor.users.findOne({_id: msg.userId});
-      if (!user) {
-        return;
-      }
-      profile = user.profile || {};
-      userMap[msg.userId] = {
-        name: profile.name || 'Anonymous'
-      };
-  });
+      _.every(userFields, function(field) {
+        if (_.has(userMap, doc[field])) {
+          return;
+        }
+        userId = doc[field];
+        user = Meteor.users.findOne({_id: userId});
+        if (!user || !user.profile) {
+          profile = {};
+        } else {
+          profile = user.profile;
+        }
+        userMap[userId] = {
+          name: profile.name || 'Anonymous'
+        };
+      });
+    });
   return {userMap: userMap, pageId: pageId};
 }

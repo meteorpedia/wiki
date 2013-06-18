@@ -2,7 +2,13 @@
  * @fileOverview The wiki read controller.
  */
 
-var HP;
+var HP, SESSION_EDIT_USER_MAP;
+
+/**
+ * @type {string}
+ * @const
+ */
+SESSION_EDIT_USER_MAP = 'edit-user-map';
 
 /**
  * @constructor
@@ -41,6 +47,11 @@ HP.render = function(state, viewName, pageName) {
 
 History = History_;
 
+Meteor.startup(function() {
+  Deps.autorun(createProfileFetcher(HP.name, SESSION_EDIT_USER_MAP,
+    'historyProfiles', WikiEdits));
+});
+
 /**
  * return {string}
  */
@@ -55,12 +66,15 @@ Template.history.edits = function() {
   var edits;
   edits = [];
   WikiEdits.find({pageId: pageId()}).forEach(function(edit) {
-    edits.push({
+    var data, userMap;
+    userMap = Session.get(SESSION_EDIT_USER_MAP) || {};
+    data = {
       date: new Date(edit.ts).toLocaleString(),
-      createdBy: edit.createdBy,
-      publishedBy: edit.publishedBy,
+      createdBy: profileInfo(edit.createdBy, userMap),
+      publishedBy: profileInfo(edit.publishedBy, userMap),
       comment: edit.comment
-    });
+    }
+    edits.push(data);
   });
   return edits;
 };
