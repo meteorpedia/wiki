@@ -86,7 +86,6 @@ Template.read.pageName = function() {
 Template.read.pageExists = function() {
   var p;
   p = WikiPages.findOne({_id: pageId()});
-  console.log('pageExists', pageId(), p);
   if (!p) {
     return false;
   }

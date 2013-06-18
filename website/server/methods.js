@@ -1,13 +1,21 @@
-var crypto;
+var crypto, WIKI_MESSAGE_LIMIT;
 
 crypto = Npm.require('crypto');
+
+/**
+ * @type {number}
+ * @const
+ */
+WIKI_MESSAGE_LIMIT = 50;
 
 /**
  * @fileOverView A declaration of methods available.
  */
 Meteor.methods({
   edit: submitEdit,
-  talk: submitTalk
+  talk: submitTalk,
+  profile: submitProfile,
+  talkProfiles: talkProfiles
 });
 
 /**
@@ -94,6 +102,7 @@ function submitEdit(pageId, pageName, content, comment) {
  * @param {string} pageId
  * @param {string} message
  * @param {string=} editId
+ * @return {boolean}
  */
 function submitTalk(pageId, message, editId) {
   var page, msg, ts;
@@ -137,9 +146,58 @@ function submitTalk(pageId, message, editId) {
 }
 
 /**
- * @param {string}
+ * @param {string} profileName
+ * @param {string} email
+ * @return {boolean}
+ */
+function submitProfile(profileName, email) {
+  var user, profile;
+  if (!this.userId) {
+    return {success: false, error: 'Must be logged in to edit profile.'};
+  }
+  profileName = profileName.trim();
+  email = email.trim();
+  if (_.isEmpty(profileName) || _.isEmpty(email)) {
+    return {success: false, error: 'Email and name cannot be blank.'};
+  }
+  user = Meteor.users.findOne({_id: this.userId});
+  user.emails[0].address = email;
+  profile = user.profile || {};
+  profile.name = profileName;
+  user.profile = profile;
+  Meteor.users.update(this.userId, user);
+  return {success: true};
+}
+
+/**
+ * @param {string} content
  * @return {string}
  */
 function formatContent(content) {
   return marked(content);
+}
+
+/**
+ * @param {string} pageId
+ */
+function talkProfiles(pageId) {
+  var userMap;
+  userMap = {};
+  WikiMessages.find({pageId: pageId},
+    {limit: WIKI_MESSAGE_LIMIT, sort: {created: -1}}).forEach(
+    function(msg) {
+      var user, profile;
+      if (_.has(userMap, msg.userId)) {
+        return;
+      }
+      user = Meteor.users.findOne({_id: msg.userId});
+      if (!user) {
+        return;
+      }
+      profile = user.profile || {};
+      userMap[msg.userId] = {
+        name: profile.name || 'Anonymous'
+      };
+  });
+  return {userMap: userMap, pageId: pageId};
 }

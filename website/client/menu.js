@@ -32,7 +32,6 @@ Template.pageMenu.events({
  * @return {boolean}
  */
 Template.pageMenu.isPage = function() {
-  console.log('pageName', pageName());
   return !!pageName();
 };
 
@@ -46,7 +45,6 @@ Template.pageMenu.pageName = function() {
  * @return {boolean}
  */
 Template.pageMenu.isProfile = function() {
-  console.log('pt', pageType());
   return pageType() === 'edit_profile';
 };
 

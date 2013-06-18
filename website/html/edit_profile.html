@@ -1,12 +1,29 @@
 <template name="edit_profile">
   <div class="edit-profile">
     <h1>Edit Profile</h1>
+    {{#unless isLoggedIn}}
+    <div class="alert alert-warning">
+      You are not logged in.
+    </div>
+    {{/unless}}
+    {{#if hasError}}
+    <div class="alert alert-error">
+      {{error}}
+    </div>
+    {{/if}}
+    {{#if saved}}
+    <div class="alert alert-success">
+      Your profile update was saved.
+    </div>
+    {{/if}}
     <form class="well" id="edit-profile-form">
       <div class="row">
         <span class="span8">
           <label>
             Profile name: <br/><br/>
             <input type="text" value="{{profileName}}"
+            id="edit-profile-name-input"
+            {{#unless isLoggedIn}}disabled="disabled"{{/unless}}
               class="profile-name-input" tabindex="1"/>
           </label>
         </span>
@@ -16,6 +33,8 @@
           <label>
             Email: <br/><br/>
             <input type="text" value="{{email}}"
+            id="edit-profile-email-input"
+            {{#unless isLoggedIn}}disabled="disabled"{{/unless}}
               class="profile-email-input" tabindex="2"/>
           </label>
         </span>
@@ -23,7 +42,8 @@
       <div class="row">
         <span class="span8">
           <input type="submit" class="btn btn-success" value="Save"
-          tabindex="3"/>
+            {{#unless isLoggedIn}}disabled="disabled"{{/unless}}
+            tabindex="3"/>
         </span>
       </div>
     </form>
