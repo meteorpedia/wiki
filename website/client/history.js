@@ -65,7 +65,7 @@ Template.history.pageTitle = function() {
 Template.history.edits = function() {
   var edits;
   edits = [];
-  WikiEdits.find({pageId: pageId()}).forEach(function(edit) {
+  WikiEdits.find({pageId: pageId()}, {sort: {ts: -1}}).forEach(function(edit) {
     var data, userMap;
     userMap = Session.get(SESSION_EDIT_USER_MAP) || {};
     data = {
