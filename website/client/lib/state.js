@@ -34,9 +34,18 @@ pageName = pageName_;
 function formattedPageName_() {
   var name;
   name = Session.get(SESSION_PAGE_NAME_KEY) || '';
-  return name.split('_').join(' ');
+  return formatPageName_(name);
 }
 formattedPageName = formattedPageName_;
+
+/**
+ * @param {string} name
+ * @return {string}
+ */
+function formatPageName_(name) {
+  return name.split('_').join(' ');
+}
+formatPageName = formatPageName_;
 
 /**
  * @return {string}

@@ -51,6 +51,12 @@ EP.render = function(state, viewName, pageName) {
   Session.set(SESSION_PAGE_TYPE, viewName);
 };
 
+/** @inheritDoc */
+EP.dispose = function() {
+  Session.set(SESSION_EDIT_ERROR, null);
+  Session.set(SESSION_EDIT_ERROR_DESC_PREFIX, null);
+};
+
 Edit = Edit_;
 
 /**

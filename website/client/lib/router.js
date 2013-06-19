@@ -15,28 +15,34 @@ history = window.history;
 
 /**
  * @param {string} routeName
- * @param {Function} callback
- * @param {Function} template
- * @param {function} pathGenerator
+ * @param {View} view
  * @constructor
  */
-function Route(routeName, callback, template, pathGenerator) {
+function Route(routeName, view) {
   /**
    * @type {string}
    */
   this.routeName = routeName;
   /**
-   * @type {Function}
+   * @type {View}
    */
-  this.callback = callback;
+  this.view = view;
   /**
    * @type {Function}
    */
-  this.template = template;
+  this.dispose = _.bind(view.dispose, view);
   /**
    * @type {Function}
    */
-  this.pathGenerator = pathGenerator;
+  this.callback = _.bind(view.render, view);
+  /**
+   * @type {Function}
+   */
+  this.template = view.template;
+  /**
+   * @type {Function}
+   */
+  this.pathGenerator = _.bind(view.pathGenerator, view);
 }
 
 /**
@@ -70,18 +76,21 @@ function Router_(defaultRouteName, opt_defaultRouteArgs,
    * @private
    */
   this.defaultCallbackArgs_ = opt_defaultCallbackArgs || [];
+  /**
+   * @type {Route}
+   * @private
+   */
+  this.currentRoute_ = null;
   window.addEventListener('popstate', _.bind(this.handlePop_, this));
 }
 RP = Router_.prototype;
 
 /**
  * @param {string} routeName
- * @param {Function} pathGenerator
- * @param {Function} callback
- * @param {Function} template
+ * @param {View} view
  */
-RP.addRoute = function(routeName, pathGenerator, template, callback) {
-  routes[routeName] = new Route(routeName, pathGenerator, template, callback);
+RP.addRoute = function(routeName, view) {
+  routes[routeName] = new Route(routeName, view);
 };
 
 /**
@@ -94,6 +103,9 @@ RP.addRoute = function(routeName, pathGenerator, template, callback) {
 RP.run = function(routeName, pathGenArgs, callbackArgs, opt_state,
     opt_replace) {
   var route, state;
+  if (!_.isNull(this.currentRoute_)) {
+    this.currentRoute_.dispose();
+  }
   route = routes[routeName];
   state = {routeName: routeName};
   if (_.isObject(opt_state)) {
@@ -106,6 +118,7 @@ RP.run = function(routeName, pathGenArgs, callbackArgs, opt_state,
     history.pushState(state, routeName,
       '/' + route.pathGenerator.apply(route, pathGenArgs));
   }
+  this.currentRoute_ = route;
   this.runTemplate(routeName, route.callback, callbackArgs);
 }
 

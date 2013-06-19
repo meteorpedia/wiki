@@ -92,6 +92,7 @@ function submitEdit(pageId, pageName, content, comment) {
     WikiPages.update(page._id, page);
   }
   edit.pageId = page._id;
+  edit.pageName = page.name;
   edit._id = WikiEdits.insert(edit);
   page.lastEditId = edit._id;
   page.lastUpdated = ts;
@@ -113,7 +114,7 @@ function submitTalk(pageId, message, editId) {
   if (!_.isString(pageId) || _.isEmpty(pageId)) {
     return {success: false, error: 'This page has not been created yet.'};
   }
-  if (!WikiPages.findOne({_id: pageId})) {
+  if (!(page = WikiPages.findOne({_id: pageId}))) {
     return {success: false, error: 'Tried to add a comment to an invalid page.'};
   }
   message = message.trim();
@@ -139,6 +140,7 @@ function submitTalk(pageId, message, editId) {
     formattedContent: formatContent(message),
     userId: this.userId,
     pageId: pageId,
+    pageName: page.name,
     updated: ts,
     created: ts
   }

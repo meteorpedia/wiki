@@ -42,10 +42,9 @@ EP.pathGenerator_ = function() {
 /**
  * @param {Object} state
  * @param {string} viewName
- * @param {string} pageName
  * @protected
  */
-EP.render = function(state, viewName, pageName) {
+EP.render = function(state, viewName) {
   Session.set(SESSION_PAGE_TYPE, viewName);
   Session.set(SESSION_PROFILE_ERROR, '');
   Session.set(SESSION_PROFILE_SAVED, '');

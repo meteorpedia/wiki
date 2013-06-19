@@ -3,7 +3,7 @@ var activeViews, views, SITE_NAME;
 /**
  * @type {Array.<View>}
  */
-activeViews = [Read, Edit, Talk, History, EditProfile];
+activeViews = [Read, Edit, Talk, History, EditProfile, Profile];
 
 /**
  * @type {Array}

@@ -1,6 +1,54 @@
+<template name="profile">
+  <div class="profile">
+    {{#with user}}
+      <h1>{{> profileLink}}<h1>
+    {{/with}}
+  </div>
+  <div class="row">
+    <span class="span6">
+      {{#with edits}}
+        {{> profileItems}}
+      {{/with}}
+    </span>
+    <span class="span6">
+      {{#with messages}}
+        {{> profileItems}}
+      {{/with}}
+    </span>
+  </div>
+</template>
+
+<template name="profileItems">
+  <div class="row">
+    <span class="span6">
+      <h4>{{header}}</h4>
+    </span>
+  </div>
+  {{#each items}}
+    <div class="profile-edit-list-item">
+      <div class="row">
+        <span class="span6">
+          {{{message}}}
+        </span>
+      </div>
+      <div class="row">
+        <span class="span3">
+          <a class="internal-link"
+            href="/{{pageType}}/{{pageId}}">{{pageName}}</a>
+        </span>
+        <span class="span3">
+          {{when}}
+        </span>
+      </div>
+    </div>
+  {{/each}}
+</template>
+
 <template name="profileLink">
   <span class="profile-link">
-    <a href="/profle/{{userId}}">{{userName}}
+    <a data-type="profile" data-id="{{userId}}"
+      class="internal-profile-link internal-link"
+      href="/profile/{{userId}}">{{userName}}
       <span class="profile-hash">({{userHash}})</span></a>
   </span>
 </template>

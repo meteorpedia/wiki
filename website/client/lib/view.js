@@ -11,8 +11,7 @@ View = {
    */
   init_: function() {
     this.template = Template[this.name];
-    window.router.addRoute(this.name, _.bind(this.render, this), this.template,
-     _.bind(this.pathGenerator_, this));
+    window.router.addRoute(this.name, this);
   },
   /**
    * Let the view know it's being rendered.
@@ -24,11 +23,10 @@ View = {
   },
   /**
    * Generate a path for a view.
-   * @protected
    * @return {string}
    */
-  pathGenerator_: function() {
-    return '';
+  pathGenerator: function() {
+    return this.pathGenerator_.apply(this, arguments);
   },
   /**
    * Run the router for this view. Only used to tell router how to generate
@@ -37,5 +35,9 @@ View = {
    * @param {*=} opt_args
    */
   run: function(opt_args) {
-  }
+  },
+  /**
+   * Clean up any stuff that needs to be in the view.
+   */
+  dispose: function() {}
 };

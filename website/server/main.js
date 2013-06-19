@@ -19,21 +19,25 @@ Meteor.startup(function () {
 
 function startPublish() {
   Meteor.publish('currentPage', function(pageName) {
-    var p;
-    console.log('currentPage', pageName);
-    p = WikiPages.find({name: pageName});
-    return p;
+    return WikiPages.find({name: pageName});
   });
   Meteor.publish('recentEdits', function(pageId) {
-    var edits;
     return WikiEdits.find({pageId: pageId}, {sort: {ts: -1},
       limit: RECENT_EDIT_LIMIT});
     return edits;
   });
   Meteor.publish('recentMessages', function(pageId) {
-    var messages;
     return WikiMessages.find({pageId: pageId}, {sort: {created: -1},
       limit: RECENT_MESSAGE_LIMIT});
+  });
+  Meteor.publish('profileView', function(userId) {
+    return Meteor.users.findOne(userId);
+  });
+  Meteor.publish('messagesForUser', function(userId) {
+    return WikiMessages.find({userId: userId}, {sort: {created: -1}});
+  });
+  Meteor.publish('editsForUser', function(userId) {
+    return WikiEdits.find({createdBy: userId}, {sort: {ts: -1}});
   });
 }
 
