@@ -103,28 +103,53 @@ Template.history.edits = function() {
   return edits;
 };
 
+Template.history.events({
+  'click a.internal-link': handleHistoryInternalLink
+});
+
 /**
  * @return {boolean}
  */
-Template.history.showHistoricalEdit = function() {
+Template.historicalEdit.showHistoricalEdit = function() {
   return !_.isNull(Session.get(SESSION_EDIT_TS));
 };
 
 /**
  * @return {string}
  */
-Template.history.historicalEditContent = function() {
-  var edit;
+Template.historicalEdit.data = function() {
+  var edit, userMap;
+  userMap = Session.get(SESSION_EDIT_USER_MAP) || {};
   edit = WikiEdits.findOne({ts: Session.get(SESSION_EDIT_TS)});
   if (!edit) {
-    return 'Not found.';
+    return {formattedContent: 'Not found.'};
   }
-  return edit.formattedContent;
+  return {
+    author: profileInfo(edit.createdBy, userMap),
+    date: new Date(edit.ts).toLocaleString(),
+    comment: edit.comment,
+    formattedContent: edit.formattedContent
+  };
 };
 
-Template.history.events({
-  'click a.internal-link': handleHistoryInternalLink
+Template.historicalEdit.events({
+  'click a.internal-action': handleHistoryInternalAction
 });
+
+/**
+ * @param {Object} event
+ */
+function handleHistoryInternalAction(event) {
+  var type, name;
+  name = pageName();
+  event.preventDefault();
+  type = $(event.target).attr('data-action');
+  if (type === 'close') {
+    window.router.run('history', [name], [{}, 'history', name]);
+  }
+
+};
+
 
 /**
  * @param {Object} event

@@ -21,11 +21,44 @@
       </tbody>
     </table>
   </div>
+  {{> historicalEdit}}
+</template>
+
+<template name="historicalEdit">
   {{#if showHistoricalEdit}}
     {{> modal-blackout}}
     <div class="modal-container">
-      <div class="historical-edit">
-        {{{historicalEditContent}}}
+      <div class="historical-edit span10">
+        <a href="#"
+          class="icon-large icon-remove-sign internal-action historical-close"
+          data-type="action"
+          data-action="close"></a>
+        {{#with data}}
+        <div class="historical-edit-header row">
+          <div class="span2">
+          {{#if hasPrev}}
+          {{/if}}
+          </div>
+          <div class="span6 historical-edit-who">
+            By
+            {{#with author}}
+              {{> profileLink}}
+            {{/with}}
+            on
+            {{date}}
+          </div>
+          <div class="span2">
+          {{#if hasNext}}
+          {{/if}}
+          </div>
+        </div>
+        <div class="historical-edit-comment row">
+          {{comment}}
+        </div>
+        <div class="historical-edit-content row">
+          {{{formattedContent}}}
+        </div>
+        {{/with}}
       </div>
     </div>
   {{/if}}

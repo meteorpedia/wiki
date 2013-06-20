@@ -435,11 +435,30 @@
   z-index: @z_plane_5;
 }
 .historical-edit {
+  position: relative;
+  float: none;
   margin: 100px auto;
-  padding: 20px;
   max-height: 500px;
   background-color: @white;
-  width: 800px;
   overflow-x: hidden;
+  padding: 20px;
   overflow-y: auto;
+  .row {
+    margin: 0 20px;
+  }
+  .historical-edit-who {
+    margin: 0px;
+    text-align: center;
+  }
+  .historical-edit-comment {
+    text-align: center;
+    padding: 10px 0;
+    border: 0px solid @grayLighter;
+    border-bottom-width: 1px;
+  }
+  .historical-close {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+  }
 }
