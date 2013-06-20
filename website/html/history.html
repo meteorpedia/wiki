@@ -10,14 +10,23 @@
       </thead>
       <tbody>
         {{#each edits}}
-        <tr>
-          <td>{{date}}</td>
-          <td>{{#with createdBy}}{{> profileLink}}{{/with}}</td>
-          <td>{{#with publishedBy}}{{> profileLink}}{{/with}}</td>
-          <td>{{comment}}</td>
-        </tr>
+          <tr>
+            <td><a data-type="history" data-ts="{{ts}}" class="internal-link"
+                  href="/history/{{pageId}}/{{ts}}">{{date}}</a></td>
+            <td>{{#with createdBy}}{{> profileLink}}{{/with}}</td>
+            <td>{{#with publishedBy}}{{> profileLink}}{{/with}}</td>
+            <td>{{comment}}</td>
+          </tr>
         {{/each}}
       </tbody>
     </table>
   </div>
+  {{#if showHistoricalEdit}}
+    {{> modal-blackout}}
+    <div class="modal-container">
+      <div class="historical-edit">
+        {{{historicalEditContent}}}
+      </div>
+    </div>
+  {{/if}}
 </template>

@@ -299,6 +299,17 @@
 // 768px-979px
 @fluidGridColumnWidth768:      percentage(@gridColumnWidth768/@gridRowWidth768);
 @fluidGridGutterWidth768:      percentage(@gridGutterWidth768/@gridRowWidth768);
+
+
+// BEGIN WIKI LESS
+
+@z_plane_1: 10;
+@z_plane_2: 20;
+@z_plane_3: 30;
+@z_plane_4: 40;
+@z_plane_5: 50;
+
+
 #login-buttons {
   line-height: 58px;
   margin-left: 35px;
@@ -403,4 +414,30 @@
   height: 300px;
   text-align: center;
   padding-top: 150px;
+}
+.modal-blackout {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+  overflow: hidden;
+  background-color: @grayDarker;
+  opacity: 0.75;
+  z-index: @z_plane_5;
+}
+.modal-container {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+  z-index: @z_plane_5;
+}
+.historical-edit {
+  margin: 100px auto;
+  padding: 20px;
+  max-height: 400px;
+  background-color: @white;
+  width: 800px;
 }
