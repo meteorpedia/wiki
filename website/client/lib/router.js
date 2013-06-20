@@ -189,11 +189,18 @@ RP.handlePop_ = function(event) {
 
 Router = Router_;
 
+/**
+ * Show loading icon. Debounced and and implements a pause after stop
+ * loading to prevent flickering.
+ */
 function loading_() {
   Session.set(SESSION_LOADING, true);
 }
 loading = loading_;
 
+/**
+ * Stop showing loading icon. Always stops.
+ */
 function stopLoading_() {
   Session.set(SESSION_LOADING, false);
 }

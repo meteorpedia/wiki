@@ -170,9 +170,11 @@ function createProfileFetcher_(pgName, sessionKey, methodName, collection) {
       if (_.has(userMapCache, id)) {
         Session.set(sessionKey, userMapCache[id]);
       }
+      loading();
       Meteor.call(methodName, id, function(err, response) {
         var userMapCache;
         // Getting it again because maybe it changed.
+        stopLoading();
         userMapCache = Session.get(SESSION_PROFILE_CACHE_KEY) || {};
         if (err || !response || !response.userMap) {
           return Session.set(sessionKey, {});
