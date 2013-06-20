@@ -434,7 +434,7 @@
   right: 0px;
   z-index: @z_plane_5;
 }
-.historical-edit {
+.modal-content {
   position: relative;
   float: none;
   border: 4px solid @grayDark;
@@ -445,6 +445,13 @@
   overflow-x: hidden;
   padding: 20px;
   overflow-y: auto;
+  .modal-close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+  }
+}
+.historical-edit {
   .row {
     margin: 0 20px;
   }
@@ -457,10 +464,5 @@
     padding: 10px 0;
     border: 0px solid @grayLighter;
     border-bottom-width: 1px;
-  }
-  .historical-close {
-    position: absolute;
-    top: 5px;
-    right: 5px;
   }
 }
