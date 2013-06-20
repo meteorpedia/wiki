@@ -2,7 +2,7 @@
  * @fileOverview The router for the app.
  */
 
-var routes, RP, history, ROUTE_SESSION_KEY;
+var routes, RP, history, ROUTE_SESSION_KEY, SESSION_LOADING;
 
 /**
  * @type {string}
@@ -10,6 +10,11 @@ var routes, RP, history, ROUTE_SESSION_KEY;
  */
 ROUTE_SESSION_KEY = 'routeName';
 
+/**
+ * @type {string}
+ * @const
+ */
+SESSION_LOADING = 'loading';
 
 history = window.history;
 
@@ -134,7 +139,9 @@ RP.runTemplate = function(routeName, callback, callbackArgs) {
   Session.set(ROUTE_SESSION_KEY, routeName);
 };
 
-/** @inheritDoc */
+/**
+ * return {string}
+ */
 Template.main.content = function() {
   var routeName, route, template;
   routeName = Session.get(ROUTE_SESSION_KEY);
@@ -143,6 +150,13 @@ Template.main.content = function() {
   }
   route = routes[routeName];
   return route.template();
+};
+
+/**
+ * @return {boolean}
+ */
+Template.main.loading = function() {
+  return !!Session.get(SESSION_LOADING);
 };
 
 /**
@@ -174,3 +188,13 @@ RP.handlePop_ = function(event) {
 
 
 Router = Router_;
+
+function loading_() {
+  Session.set(SESSION_LOADING, true);
+}
+loading = loading_;
+
+function stopLoading_() {
+  Session.set(SESSION_LOADING, false);
+}
+stopLoading = stopLoading_;

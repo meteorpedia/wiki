@@ -29,13 +29,16 @@ Deps.autorun(function() {
 });
 
 Deps.autorun(function() {
-  Meteor.subscribe('currentPage', pageName());
+  loading();
+  Meteor.subscribe('currentPage', pageName(), stopLoading);
 });
 Deps.autorun(function() {
-  Meteor.subscribe('recentEdits', pageId());
+  loading();
+  Meteor.subscribe('recentEdits', pageId(), stopLoading);
 });
 Deps.autorun(function() {
-  Meteor.subscribe('recentMessages', pageId());
+  loading();
+  Meteor.subscribe('recentMessages', pageId(), stopLoading);
 });
 
 Meteor.startup(function() {

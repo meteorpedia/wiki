@@ -67,5 +67,11 @@
 </template>
 
 <template name="main">
-  {{{content}}}
+  {{#if loading}}
+    <div id="main-loading">
+      <img src="/img/loading.gif" />
+    </div>
+  {{else}}
+    {{{content}}}
+  {{/if}}
 </template>
