@@ -29,34 +29,49 @@
     {{> modal-blackout}}
     <div class="modal-container">
       <div class="modal-content historical-edit span10">
-        <a href="#"
-          class="icon-large icon-remove-sign internal-action modal-close"
-          data-type="action"
-          data-action="close"></a>
+        <div class="row">
+          <div class="span10 historical-nav">
+            {{#if previous}}
+            <a href="#"
+              class="icon-large icon-circle-arrow-left internal-action prev"
+              data-ts="{{previous}}"
+              data-type="action" data-action="previous"></a>
+            {{/if}}
+            {{#if next}}
+              <a href="#"
+                class="icon-large icon-circle-arrow-right internal-action next"
+                data-ts="{{next}}"
+                data-type="action" data-action="previous"></a>
+            {{/if}}
+            <a href="#"
+              class="icon-large icon-remove-sign internal-action modal-close"
+              data-type="action" data-action="close"></a>
+          </div>
+        </div>
         {{#with data}}
-        <div class="historical-edit-header row">
-          <div class="span2">
-          {{#if hasPrev}}
-          {{/if}}
-          </div>
-          <div class="span6 historical-edit-who">
-            By
-            {{#with author}}
-              {{> profileLink}}
-            {{/with}}
-            on
-            {{date}}
-          </div>
-          <div class="span2">
-          {{#if hasNext}}
-          {{/if}}
-          </div>
+        <div class="row">
+          <span class="historical-edit-header span10">
+            <div class="span10 historical-edit-who">
+              By
+              {{#with author}}
+                {{> profileLink}}
+              {{/with}}
+              on
+              {{date}}
+            </div>
+          </span>
         </div>
-        <div class="historical-edit-comment row">
-          {{comment}}
+        <div class="row">
+          <span class="span1">&nbsp;</span>
+          <span class="span8 historical-edit-comment">
+            {{comment}}
+          </span>
+          <span class="span1">&nbsp;</span>
         </div>
-        <div class="historical-edit-content row">
-          {{{formattedContent}}}
+        <div class="row">
+          <span class="historical-edit-content span10">
+            {{{formattedContent}}}
+          </span>
         </div>
         {{/with}}
       </div>
