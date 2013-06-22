@@ -1,25 +1,31 @@
 <template name="history">
   <div class="history">
     <h1>{{pageTitle}}</h1>
-    <table class="table table-striped">
-      <thead>
-        <th>Date</th>
-        <th>Created by</th>
-        <th>Published by</th>
-        <th>Comment</th>
-      </thead>
-      <tbody>
-        {{#each edits}}
-          <tr>
-            <td><a data-type="history" data-ts="{{ts}}" class="internal-link"
-                  href="/history/{{pageId}}/{{ts}}">{{date}}</a></td>
-            <td>{{#with createdBy}}{{> profileLink}}{{/with}}</td>
-            <td>{{#with publishedBy}}{{> profileLink}}{{/with}}</td>
-            <td>{{comment}}</td>
-          </tr>
-        {{/each}}
-      </tbody>
-    </table>
+    <form id="history-compare-form">
+      <table class="table table-striped">
+        <thead>
+          <th colspan="2">Compare</th>
+          <th>Date</th>
+          <th>Created by</th>
+          <th>Published by</th>
+          <th>Comment</th>
+        </thead>
+        <tbody>
+          {{#each edits}}
+            <tr>
+              <td><input type="radio" name="from"/></td>
+              <td><input type="radio" name="to"/></td>
+              <td><a data-type="history" data-ts="{{ts}}" class="internal-link"
+                    href="/history/{{pageId}}/{{ts}}">{{date}}</a></td>
+              <td>{{#with createdBy}}{{> profileLink}}{{/with}}</td>
+              <td>{{#with publishedBy}}{{> profileLink}}{{/with}}</td>
+              <td>{{comment}}</td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+      <button class="btn">Compare</button>
+    </form>
   </div>
   {{> historicalEdit}}
 </template>
