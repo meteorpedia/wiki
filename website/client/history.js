@@ -3,7 +3,26 @@
  */
 
 var HP, SESSION_HISTORY_USER_MAP, SESSION_HISTORY_TS, SESSION_HISTORY_PREV,
-  SESSION_HISTORY_NEXT, SESSION_FROM_DIFF, SESSION_TO_DIFF;
+  SESSION_HISTORY_NEXT, SESSION_FROM_DIFF, SESSION_TO_DIFF, VIEW_TYPE_EDIT,
+  VIEW_TYPE_DIFF, SESSION_VIEW_DIFF;
+
+/**
+ * @type {string}
+ * @const
+ */
+SESSION_VIEW_DIFF = 'history-view-diff';
+
+/**
+ * @type {string}
+ * @const
+ */
+VIEW_TYPE_EDIT = 'edit';
+
+/**
+ * @type {string}
+ * @const
+ */
+VIEW_TYPE_DIFF = 'diff';
 
 /**
  * @type {string}
@@ -58,38 +77,59 @@ HP.name = 'history';
 
 /**
  * @param {string} pageName
+ * @param {string} viewType
  * @param {string=} opt_ts
+ * @param {string=} opt_toTs
  * @protected
  * @return {string}
  */
-HP.pathGenerator_ = function(pageName, opt_ts) {
-  if (_.isUndefined(opt_ts)) {
-    return [this.name, pageName].join('/');
-  } else {
-    return [this.name, pageName, opt_ts].join('/');
+HP.pathGenerator_ = function(pageName, viewType, opt_ts, opt_toTs) {
+  var args;
+  args = [this.name, pageName];
+  if (_.isUndefined(viewType)) {
+    return args.join('/');
   }
+  if (_.isUndefined(opt_toTs)) {
+    return [this.name, pageName, viewType, opt_ts].join('/');
+  }
+  return [this.name, pageName, viewType, opt_ts, opt_toTs].join('/');
 };
 
 /**
  * @param {Object} state
  * @param {string} viewName
  * @param {string} pageName
+ * @param {string} viewType
  * @param {string=} opt_ts Timestamp for which edit to show.
+ * @param {string=} opt_toTs Timestamp for which to use for to in a diff.
  * @protected
  */
-HP.render = function(state, viewName, pageName, ts) {
+HP.render = function(state, viewName, pageName, viewType, opt_ts, opt_toTs) {
+  var from, to;
   Session.set(SESSION_PAGE_NAME_KEY, pageName);
   Session.set(SESSION_PAGE_TYPE, viewName);
-  if (_.isString(ts)) {
-    Session.set(SESSION_HISTORY_TS, parseInt(ts, 10));
+  if (viewType === VIEW_TYPE_EDIT && _.isString(opt_ts)) {
+    Session.set(SESSION_HISTORY_TS, parseInt(opt_ts, 10));
+    return;
   } else {
     Session.set(SESSION_HISTORY_TS, null);
+  }
+  if (viewType === VIEW_TYPE_DIFF && !_.isUndefined(opt_ts) &&
+      !_.isUndefined(opt_toTs)) {
+    from = parseInt(opt_ts, 10);
+    to = parseInt(opt_toTs, 10);
+    Session.set(SESSION_FROM_DIFF, from);
+    Session.set(SESSION_TO_DIFF, to);
+    Session.set(SESSION_VIEW_DIFF, true);
+  } else {
+    Session.set(SESSION_VIEW_DIFF, false);
   }
 };
 
 /** @inheritDoc */
 HP.dispose = function() {
   Session.set(SESSION_HISTORY_TS, null);
+  Session.set(SESSION_VIEW_DIFF, false);
 };
 
 History = History_;
@@ -101,8 +141,18 @@ Meteor.startup(function() {
 });
 
 Deps.autorun(function() {
-  var edits, prev, next, found, ts;
-  ts = Session.get(SESSION_HISTORY_TS);
+  var result;
+  result = previousAndNextForTs(Session.get(SESSION_HISTORY_TS));
+  Session.set(SESSION_HISTORY_PREV, result.previous ? result.previous.ts : null);
+  Session.set(SESSION_HISTORY_NEXT, result.next ? result.next.ts : null);
+});
+
+/**
+ * @param {number} ts
+ * @return {Object}
+ */
+function previousAndNextForTs(ts) {
+  var edits, previous, next, found, ts;
   edits = WikiEdits.find({pageId: pageId()}, {sort: {ts: 1}});
   edits.forEach(function(edit) {
     if (edit.ts === ts) {
@@ -110,16 +160,15 @@ Deps.autorun(function() {
       return;
     }
     if (!found) {
-      prev = edit;
+      previous = edit;
       return;
     }
     if (!next) {
       next = edit;
     }
   });
-  Session.set(SESSION_HISTORY_PREV, prev ? prev.ts : null);
-  Session.set(SESSION_HISTORY_NEXT, next ? next.ts : null);
-});
+  return {previous: previous, next: next};
+}
 
 /**
  * return {string}
@@ -223,6 +272,66 @@ Template.historicalEdit.next = function() {
 };
 
 /**
+ * @return {boolean}
+ */
+Template.historicalDiff.showHistoricalDiff = function() {
+  return Session.get(SESSION_VIEW_DIFF);
+};
+
+/**
+ * @return {Object}
+ */
+Template.historicalDiff.diffFromNav = function() {
+  return getDiffNav(SESSION_FROM_DIFF);
+};
+
+/**
+ * @return {Object}
+ */
+Template.historicalDiff.diffToNav = function() {
+  return getDiffNav(SESSION_TO_DIFF);
+};
+
+/**
+ * @return {string}
+ */
+Template.historicalDiff.diff = function() {
+  var diff, fromTs, toTs, from, to;
+  fromTs = Session.get(SESSION_FROM_DIFF);
+  toTs = Session.get(SESSION_TO_DIFF);
+  if (!fromTs || !toTs) {
+    return null;
+  }
+  from = WikiEdits.findOne({ts: fromTs});
+  to = WikiEdits.findOne({ts: toTs});
+  if (!from || !to) {
+    return null;
+  }
+  return JsDiff.diffWords(from.content, to.content);
+};
+
+/**
+ * @param {string} sessionKey
+ * return {Object}
+ */
+function getDiffNav(sessionKey) {
+  var edit, ts, userMap, result;
+  ts = Session.get(sessionKey);
+  edit = WikiEdits.findOne({ts: ts});
+  if (!edit) {
+    return {};
+  }
+  userMap = Session.get(SESSION_HISTORY_USER_MAP) || {};
+  result = previousAndNextForTs(edit.ts);
+  return {
+    previous: result.previous ? result.previous.ts : null,
+    next: result.next ? result.next.ts : null,
+    who: profileInfo(edit.createdBy, userMap),
+    what: {ts: edit.ts, date: new Date(edit.ts).toLocaleString()}
+  };
+}
+
+/**
  * @param {Object} event
  */
 function handleHistoryInternalAction(event) {
@@ -286,7 +395,13 @@ function handleDiffSelection(event, setSessionKey, checkSessionKey) {
  * @param {Object} event
  */
 function handleCompareSubmit(event) {
+  var to, from, name;
   event.preventDefault();
+  to = Session.get(SESSION_TO_DIFF);
+  from = Session.get(SESSION_FROM_DIFF);
+  name = pageName();
+  window.router.run('history', [name, VIEW_TYPE_DIFF, from, to], [{}, 'history',
+    name, VIEW_TYPE_DIFF, from, to]);
 }
 
 
@@ -313,6 +428,7 @@ function handleHistoryNavEvent(event) {
   ts = el.attr('data-ts');
   if (ts) {
     name = pageName();
-    window.router.run('history', [name, ts], [{}, 'history', name, ts]);
+    window.router.run('history', [name, VIEW_TYPE_EDIT, ts], [{}, 'history',
+      name, VIEW_TYPE_EDIT, ts]);
   }
 }
