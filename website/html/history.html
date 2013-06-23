@@ -13,8 +13,24 @@
         <tbody>
           {{#each edits}}
             <tr>
-              <td><input type="radio" name="from"/></td>
-              <td><input type="radio" name="to"/></td>
+              <td>
+              {{#isFrom ts}}
+                <input class="from-input" type="radio" name="from"
+                data-ts="{{../ts}}" checked="checked" />
+              {{else}}
+                <input class="from-input" type="radio" name="from"
+                  data-ts="{{../ts}}"/>
+              {{/isFrom}}
+              </td>
+              <td>
+              {{#isTo ts}}
+                <input class="to-input" type="radio" name="to"
+                data-ts="{{../ts}}" checked="checked" />
+              {{else}}
+                <input class="to-input" type="radio" name="to"
+                 data-ts="{{../ts}}" />
+              {{/isTo}}
+              </td>
               <td><a data-type="history" data-ts="{{ts}}" class="internal-link"
                     href="/history/{{pageId}}/{{ts}}">{{date}}</a></td>
               <td>{{#with createdBy}}{{> profileLink}}{{/with}}</td>

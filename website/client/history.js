@@ -3,7 +3,19 @@
  */
 
 var HP, SESSION_HISTORY_USER_MAP, SESSION_HISTORY_TS, SESSION_HISTORY_PREV,
-  SESSION_HISTORY_NEXT;
+  SESSION_HISTORY_NEXT, SESSION_FROM_DIFF, SESSION_TO_DIFF;
+
+/**
+ * @type {string}
+ * @const
+ */
+SESSION_FROM_DIFF = 'history-from-diff';
+
+/**
+ * @type {string}
+ * @const
+ */
+SESSION_TO_DIFF = 'history-to-diff';
 
 /**
  * @type {string}
@@ -138,8 +150,33 @@ Template.history.edits = function() {
   return edits;
 };
 
+/**
+ * @param {number} ts
+ * @Param {Object} options
+ * @return {boolean}
+ */
+Template.history.isFrom = function (ts, options) {
+  var result;
+  result = ifSameAsSession(ts, SESSION_FROM_DIFF, options);
+  return result;
+};
+
+/**
+ * @param {number} ts
+ * @Param {Object} options
+ * @return {boolean}
+ */
+Template.history.isTo = function (ts, options) {
+  var result;
+  result = ifSameAsSession(ts, SESSION_TO_DIFF, options);
+  return result;
+};
+
 Template.history.events({
-  'click a.internal-link': handleHistoryInternalLink
+  'click a.internal-link': handleHistoryInternalLink,
+  'submit #history-compare-form': handleCompareSubmit,
+  'change input.to-input': handleToChange,
+  'change input.from-input': handleFromChange
 });
 
 /**
@@ -200,6 +237,57 @@ function handleHistoryInternalAction(event) {
     handleHistoryNavEvent(event);
   }
 };
+
+/**
+ * @param {Object} event
+ */
+function handleToChange(event) {
+  handleDiffSelection(event, SESSION_TO_DIFF, SESSION_FROM_DIFF);
+}
+
+/**
+ * @param {Object} event
+ */
+function handleFromChange(event) {
+  handleDiffSelection(event, SESSION_FROM_DIFF, SESSION_TO_DIFF);
+}
+
+/**
+ * @param {Object} event
+ * @param {string} setSessionKey
+ * @param {string} checkSessionKey
+ */
+function handleDiffSelection(event, setSessionKey, checkSessionKey) {
+  var el, ts;
+  el = $(event.target);
+  ts = parseInt(el.attr('data-ts'), 10);
+  if (ts === Session.get(checkSessionKey)) {
+    event.preventDefault();
+    el.removeAttr('checked');
+    return;
+  }
+  if (setSessionKey === SESSION_TO_DIFF) {
+    if (ts < Session.get(checkSessionKey)) {
+      Session.set(setSessionKey, Session.get(checkSessionKey));
+      Session.set(checkSessionKey, ts);
+      return;
+    }
+  } else {
+    if (ts > Session.get(checkSessionKey)) {
+      Session.set(setSessionKey, Session.get(checkSessionKey));
+      Session.set(checkSessionKey, ts);
+      return;
+    }
+  }
+  Session.set(setSessionKey, ts);
+}
+
+/**
+ * @param {Object} event
+ */
+function handleCompareSubmit(event) {
+  event.preventDefault();
+}
 
 
 /**

@@ -62,3 +62,18 @@ function pageId_() {
   return Session.get(SESSION_PAGE_ID);
 }
 pageId = pageId_;
+
+/**
+ * Compare a value to what's in a session for
+ * a template if check.
+ * @param {*} value
+ * @param {string} sessionKey
+ * @param {Object} options
+ */
+function ifSameAsSession_(value, sessionKey, options) {
+  if (value === Session.get(sessionKey)) {
+    return options.fn(this);
+  }
+  return options.inverse(this);
+}
+ifSameAsSession = ifSameAsSession_;
