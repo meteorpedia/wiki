@@ -48,7 +48,10 @@
 
 <template name="editLink">
   <a data-type="history" data-ts="{{ts}}" class="internal-link"
-      href="/history/{{pageId}}/edit/{{ts}}">{{date}}</a>
+    href="/history/{{pageId}}/edit/{{ts}}">{{date}}</a>
+  <a data-type="previous-history"
+    data-ts="{{ts}}" class="internal-link previous-diff-link"
+    href="/history/{{pageId}}/diff/previous/{{ts}}">(diff)</a>
 </template>
 
 <template name="diffNav">

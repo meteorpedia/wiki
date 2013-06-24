@@ -4,7 +4,20 @@
 
 var HP, SESSION_HISTORY_USER_MAP, SESSION_HISTORY_TS, SESSION_HISTORY_PREV,
   SESSION_HISTORY_NEXT, SESSION_FROM_DIFF, SESSION_TO_DIFF, VIEW_TYPE_EDIT,
-  VIEW_TYPE_DIFF, SESSION_VIEW_DIFF, DIRECTION_TO, DIRECTION_FROM;
+  VIEW_TYPE_DIFF, SESSION_VIEW_DIFF, DIRECTION_TO, DIRECTION_FROM,
+  PREVIOUS_FROM, NEXT_TO, SESSION_IS_PREV_SHORTCUT, SESSION_IS_NEXT_SHORTCUT;
+
+/**
+ * @type {string}
+ * @const
+ */
+NEXT_TO = 'next';
+
+/**
+ * @type {string}
+ * @const
+ */
+PREVIOUS_FROM = 'previous';
 
 /**
  * @type {string}
@@ -117,7 +130,7 @@ HP.pathGenerator_ = function(pageName, viewType, opt_ts, opt_toTs) {
  * @protected
  */
 HP.render = function(state, viewName, pageName, viewType, opt_ts, opt_toTs) {
-  var from, to;
+  var from, to, result;
   Session.set(SESSION_PAGE_NAME_KEY, pageName);
   Session.set(SESSION_PAGE_TYPE, viewName);
   if (viewType === VIEW_TYPE_EDIT && !_.isUndefined(opt_ts)) {
@@ -128,8 +141,32 @@ HP.render = function(state, viewName, pageName, viewType, opt_ts, opt_toTs) {
   }
   if (viewType === VIEW_TYPE_DIFF && !_.isUndefined(opt_ts) &&
       !_.isUndefined(opt_toTs)) {
-    from = parseInt(opt_ts, 10);
-    to = parseInt(opt_toTs, 10);
+    /**
+     * What follows is some what convoluted logic that allows for the
+     * 'previous' and 'next' shortcuts in URLS when wanting to see diffs.
+     * XXX: Put in separate function?
+     */
+    if (opt_ts === PREVIOUS_FROM) {
+      Session.set(SESSION_IS_PREV_SHORTCUT, true);
+      to = parseInt(opt_toTs, 10);
+      if (!to) {
+        Session.set(SESSION_VIEW_DIFF, false);
+        return;
+      }
+      from = getOpposite(to, true);
+    } else {
+      from = parseInt(opt_ts, 10);
+      if (!from) {
+        Session.set(SESSION_VIEW_DIFF, false);
+        return;
+      }
+      if (opt_toTs === NEXT_TO) {
+        Session.set(SESSION_IS_NEXT_SHORTCUT, true);
+        to = getOpposite(from, false);
+      } else {
+        to = parseInt(opt_toTs, 10);
+      }
+    }
     Session.set(SESSION_FROM_DIFF, from);
     Session.set(SESSION_TO_DIFF, to);
     Session.set(SESSION_VIEW_DIFF, true);
@@ -138,10 +175,34 @@ HP.render = function(state, viewName, pageName, viewType, opt_ts, opt_toTs) {
   }
 };
 
+/**
+ * @param {number} other
+ * @param {boolean} fromTo
+ * @return {number}
+ */
+function getOpposite(other, fromTo) {
+  var opposite; 
+  result = previousAndNextForTs(other);
+  if (!result) {
+    return other;
+  }
+  if (fromTo) {
+    opposite = result.previous;
+  } else {
+    opposite = result.next;
+  }
+  if (!opposite) {
+    return other;
+  }
+  return opposite.ts;
+}
+
 /** @inheritDoc */
 HP.dispose = function() {
   Session.set(SESSION_HISTORY_TS, null);
   Session.set(SESSION_VIEW_DIFF, false);
+  Session.set(SESSION_IS_PREV_SHORTCUT, false);
+  Session.set(SESSION_IS_NEXT_SHORTCUT, false);
   Session.set(SESSION_TO_DIFF, undefined);
   Session.set(SESSION_FROM_DIFF, undefined);
 };
@@ -316,6 +377,15 @@ Template.historicalDiff.diff = function() {
   if (!fromTs || !toTs) {
     return null;
   }
+  if (fromTs === toTs) {
+    if (Session.get(SESSION_IS_PREV_SHORTCUT)) {
+      fromTs = getOpposite(toTs, true);
+      Session.set(SESSION_FROM_DIFF, fromTs);
+    } else if (Session.get(SESSION_IS_NEXT_SHORTCUT)) {
+      toTs = getOpposite(toTs, false);
+      Session.set(SESSION_TO_DIFF, fromTs);
+    }
+  }
   from = WikiEdits.findOne({ts: fromTs});
   to = WikiEdits.findOne({ts: toTs});
   if (!from || !to) {
@@ -334,8 +404,9 @@ Template.historicalDiff.events({
  * return {Object}
  */
 function getDiffNav(sessionKey, direction) {
-  var edit, ts, userMap, result;
+  var edit, ts, userMap, result, name;
   ts = Session.get(sessionKey);
+  name = pageName();
   edit = WikiEdits.findOne({ts: ts});
   if (!edit) {
     return {};
@@ -346,7 +417,7 @@ function getDiffNav(sessionKey, direction) {
     previous: result.previous ? result.previous.ts : null,
     next: result.next ? result.next.ts : null,
     who: profileInfo(edit.createdBy, userMap),
-    what: {ts: edit.ts, date: new Date(edit.ts).toLocaleString()},
+    what: {ts: edit.ts, date: new Date(edit.ts).toLocaleString(), pageId: name},
     direction: direction
   };
 }

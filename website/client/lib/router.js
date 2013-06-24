@@ -182,6 +182,7 @@ RP.handlePop_ = function(event) {
     //TODO: add a 404 page.
     return;
   }
+  this.currentRoute_ = route;
   args = [state].concat(paths);
   this.runTemplate(routeName, route.callback, args);
 };

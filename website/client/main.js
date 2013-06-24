@@ -79,4 +79,12 @@ Template.header.events({
   }
 });
 
+/**
+ * XXX: This needs to turn into an actual error view.
+ */
+function errorPage_() {
+  alert('There was an error rendering your request.');
+}
+errorPage = errorPage_;
+
 Meteor.startup(main);
