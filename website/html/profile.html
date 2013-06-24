@@ -37,7 +37,13 @@
             href="/{{pageType}}/{{pageId}}">{{pageName}}</a>
         </span>
         <span class="span3">
-          {{when}}
+          {{#if editData}}
+            {{#with editData}}
+              {{> editLink}}
+            {{/with}}
+          {{else}}
+            {{when}}
+          {{/if}}
         </span>
       </div>
     </div>

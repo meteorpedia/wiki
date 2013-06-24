@@ -84,12 +84,19 @@ Template.profile.edits = function() {
   };
   WikiEdits.find({createdBy: Session.get(SESSION_PROFILE_ID)},
     {sort: {ts: -1}}).forEach(function(edit) {
+    var date;
+    date = new Date(edit.ts).toLocaleString();
     edits.items.push({
-      pageType: 'history',
+      pageType: 'read',
       pageId: edit.pageName,
       pageName: formatPageName(edit.pageName || ''),
       message: edit.comment,
-      when: new Date(edit.ts).toLocaleString()
+      when: date,
+      editData: {
+        ts: edit.ts,
+        date: date,
+        pageId: edit.pageName
+      }
     });
   });
   return edits;
