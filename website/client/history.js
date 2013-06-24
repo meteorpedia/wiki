@@ -4,7 +4,19 @@
 
 var HP, SESSION_HISTORY_USER_MAP, SESSION_HISTORY_TS, SESSION_HISTORY_PREV,
   SESSION_HISTORY_NEXT, SESSION_FROM_DIFF, SESSION_TO_DIFF, VIEW_TYPE_EDIT,
-  VIEW_TYPE_DIFF, SESSION_VIEW_DIFF;
+  VIEW_TYPE_DIFF, SESSION_VIEW_DIFF, DIRECTION_TO, DIRECTION_FROM;
+
+/**
+ * @type {string}
+ * @const
+ */
+DIRECTION_FROM = 'from';
+
+/**
+ * @type {string}
+ * @const
+ */
+DIRECTION_TO = 'to';
 
 /**
  * @type {string}
@@ -108,7 +120,7 @@ HP.render = function(state, viewName, pageName, viewType, opt_ts, opt_toTs) {
   var from, to;
   Session.set(SESSION_PAGE_NAME_KEY, pageName);
   Session.set(SESSION_PAGE_TYPE, viewName);
-  if (viewType === VIEW_TYPE_EDIT && _.isString(opt_ts)) {
+  if (viewType === VIEW_TYPE_EDIT && !_.isUndefined(opt_ts)) {
     Session.set(SESSION_HISTORY_TS, parseInt(opt_ts, 10));
     return;
   } else {
@@ -253,10 +265,6 @@ Template.historicalEdit.data = function() {
   };
 };
 
-Template.historicalEdit.events({
-  'click a.internal-action': handleHistoryInternalAction
-});
-
 /**
  * @return {number}
  */
@@ -271,6 +279,10 @@ Template.historicalEdit.next = function() {
   return Session.get(SESSION_HISTORY_NEXT);
 };
 
+Template.historicalEdit.events({
+  'click a.internal-action': handleHistoryInternalAction
+});
+
 /**
  * @return {boolean}
  */
@@ -282,14 +294,14 @@ Template.historicalDiff.showHistoricalDiff = function() {
  * @return {Object}
  */
 Template.historicalDiff.diffFromNav = function() {
-  return getDiffNav(SESSION_FROM_DIFF);
+  return getDiffNav(SESSION_FROM_DIFF, DIRECTION_FROM);
 };
 
 /**
  * @return {Object}
  */
 Template.historicalDiff.diffToNav = function() {
-  return getDiffNav(SESSION_TO_DIFF);
+  return getDiffNav(SESSION_TO_DIFF, DIRECTION_TO);
 };
 
 /**
@@ -310,11 +322,16 @@ Template.historicalDiff.diff = function() {
   return JsDiff.diffWords(from.content, to.content);
 };
 
+Template.historicalDiff.events({
+  'click a.internal-action': handleHistoryInternalAction
+});
+
 /**
  * @param {string} sessionKey
+ * @param {string} direction
  * return {Object}
  */
-function getDiffNav(sessionKey) {
+function getDiffNav(sessionKey, direction) {
   var edit, ts, userMap, result;
   ts = Session.get(sessionKey);
   edit = WikiEdits.findOne({ts: ts});
@@ -327,7 +344,8 @@ function getDiffNav(sessionKey) {
     previous: result.previous ? result.previous.ts : null,
     next: result.next ? result.next.ts : null,
     who: profileInfo(edit.createdBy, userMap),
-    what: {ts: edit.ts, date: new Date(edit.ts).toLocaleString()}
+    what: {ts: edit.ts, date: new Date(edit.ts).toLocaleString()},
+    direction: direction
   };
 }
 
@@ -344,6 +362,9 @@ function handleHistoryInternalAction(event) {
   }
   if (type === 'previous' || type === 'next') {
     handleHistoryNavEvent(event);
+  }
+  if (type === 'diff-previous' || type === 'diff-next') {
+    handleHistoryDiffNavEvent(event);
   }
 };
 
@@ -409,7 +430,7 @@ function handleCompareSubmit(event) {
  * @param {Object} event
  */
 function handleHistoryInternalLink(event) {
-  var el, type, ts, name;
+  var el, type;
   el = $(event.target);
   type = el.attr('data-type');
   if (type === 'history') {
@@ -418,17 +439,50 @@ function handleHistoryInternalLink(event) {
   }
 }
 
-
 /**
  * @param {Object} event
  */
 function handleHistoryNavEvent(event) {
-  var el;
+  var el, ts, name;
   el = $(event.target);
-  ts = el.attr('data-ts');
+  ts = parseInt(el.attr('data-ts'), 10);
   if (ts) {
     name = pageName();
     window.router.run('history', [name, VIEW_TYPE_EDIT, ts], [{}, 'history',
       name, VIEW_TYPE_EDIT, ts]);
   }
+}
+
+/**
+ * @param {Object} event
+ */
+function handleHistoryDiffNavEvent(event) {
+  var el, ts, name, direction, from, to;
+  el = $(event.target);
+  ts = parseInt(el.attr('data-ts'), 10);
+  direction = el.attr('data-direction');
+  if (!ts || !direction) {
+    return;
+  }
+  if (direction === DIRECTION_FROM) {
+    if (ts >= Session.get(SESSION_TO_DIFF)) {
+      /*
+       * Shouldn't compare same or reverse diffs, although still possible via
+       * URL.
+       */
+      return;
+    }
+    Session.set(SESSION_FROM_DIFF, ts);
+  } else {
+    if (ts <= Session.get(SESSION_FROM_DIFF)) {
+      // Same.
+      return;
+    }
+    Session.set(SESSION_TO_DIFF, ts);
+  }
+  name = pageName();
+  from = Session.get(SESSION_FROM_DIFF);
+  to = Session.get(SESSION_TO_DIFF);
+  window.router.run('history', [name, VIEW_TYPE_DIFF, from, to], [{}, 'history',
+    name, VIEW_TYPE_DIFF, from, to]);
 }

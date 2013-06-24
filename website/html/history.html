@@ -57,8 +57,8 @@
       {{#if previous}}
         <a href="#"
           class="icon-large icon-circle-arrow-left internal-action prev"
-          data-ts="{{previous}}"
-          data-type="action" data-action="previous"></a>
+          data-ts="{{previous}}" data-type="action"
+          data-action="diff-previous" data-direction="{{direction}}"></a>
       {{else}}
         &nbsp;
       {{/if}}
@@ -77,8 +77,8 @@
       {{#if next}}
         <a href="#"
           class="icon-large icon-circle-arrow-right internal-action next"
-          data-ts="{{next}}"
-          data-type="action" data-action="next"></a>
+          data-ts="{{next}}" data-type="action" data-action="diff-next"
+          data-direction="{{direction}}"></a>
       {{else}}
         &nbsp;
       {{/if}}
