@@ -142,6 +142,8 @@ HP.render = function(state, viewName, pageName, viewType, opt_ts, opt_toTs) {
 HP.dispose = function() {
   Session.set(SESSION_HISTORY_TS, null);
   Session.set(SESSION_VIEW_DIFF, false);
+  Session.set(SESSION_TO_DIFF, undefined);
+  Session.set(SESSION_FROM_DIFF, undefined);
 };
 
 History = History_;
