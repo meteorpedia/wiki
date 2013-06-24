@@ -63,10 +63,12 @@
         &nbsp;
       {{/if}}
     </span>
-    <span class="span6">
+    <span class="span6 historical-diff-info">
+      by
       {{#with who}}
         {{> profileLink}}
       {{/with}}
+      on
       {{#with what}}
         {{> editLink}}
       {{/with}}
@@ -98,12 +100,6 @@
             {{> historicalCloseBtn}}
           </div>
         </div>
-        {{#with diffFromNav}}
-          {{> diffNav}}
-        {{/with}}
-        {{#with diffToNav}}
-          {{> diffNav}}
-        {{/with}}
         <div class="row">
           <div class="span10">
             {{#if diff}}
@@ -115,6 +111,22 @@
             {{/if}}
           </div>
         </div>
+        <div class="row">
+          <span class="historical-diff-title span10">
+            From
+          </span>
+        </div>
+        {{#with diffFromNav}}
+          {{> diffNav}}
+        {{/with}}
+        <div class="row">
+          <span class="historical-diff-title span10">
+            To
+          </span>
+        </div>
+        {{#with diffToNav}}
+          {{> diffNav}}
+        {{/with}}
       </div>
     </div>
   {{/if}}
