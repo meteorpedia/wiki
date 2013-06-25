@@ -24,7 +24,6 @@ function startPublish() {
   Meteor.publish('recentEdits', function(pageId) {
     return WikiEdits.find({pageId: pageId}, {sort: {ts: -1},
       limit: RECENT_EDIT_LIMIT});
-    return edits;
   });
   Meteor.publish('recentMessages', function(pageId) {
     return WikiMessages.find({pageId: pageId}, {sort: {created: -1},
