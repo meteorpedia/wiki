@@ -30,7 +30,7 @@ function startPublish() {
       limit: RECENT_MESSAGE_LIMIT});
   });
   Meteor.publish('profileView', function(userId) {
-    return Meteor.users.findOne(userId);
+    return Meteor.users.find(userId);
   });
   Meteor.publish('messagesForUser', function(userId) {
     return WikiMessages.find({userId: userId}, {sort: {created: -1}});
