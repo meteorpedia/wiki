@@ -38,5 +38,9 @@ function startPublish() {
   Meteor.publish('editsForUser', function(userId) {
     return WikiEdits.find({createdBy: userId}, {sort: {ts: -1}});
   });
-}
 
+  Meteor.publish('arty', function() {
+    return WikiPages.find({}, {limit: 100});
+  });
+
+}
