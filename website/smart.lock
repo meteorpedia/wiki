@@ -1,0 +1,15 @@
+{
+  "meteor": {},
+  "dependencies": {
+    "basePackages": {
+      "marked": {}
+    },
+    "packages": {
+      "marked": {
+        "git": "https://github.com/chuangbo/meteor-marked.git",
+        "tag": "v0.2.8.2",
+        "commit": "f5d9d6dbc013ad1bd568fa610eb4d8a479943f18"
+      }
+    }
+  }
+}
