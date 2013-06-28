@@ -5,7 +5,20 @@
 var HP, SESSION_HISTORY_USER_MAP, SESSION_HISTORY_TS, SESSION_HISTORY_PREV,
   SESSION_HISTORY_NEXT, SESSION_FROM_DIFF, SESSION_TO_DIFF, VIEW_TYPE_EDIT,
   VIEW_TYPE_DIFF, SESSION_VIEW_DIFF, DIRECTION_TO, DIRECTION_FROM,
-  PREVIOUS_FROM, NEXT_TO, SESSION_IS_PREV_SHORTCUT, SESSION_IS_NEXT_SHORTCUT;
+  PREVIOUS_FROM, NEXT_TO, SESSION_IS_PREV_SHORTCUT, SESSION_IS_NEXT_SHORTCUT,
+  SESSION_RESTORE_SUCCESS, SESSION_RESTORE_FAILED;
+
+/**
+ * @type {string}
+ * @const
+ */
+SESSION_RESTORE_SUCCESS = 'history-restore-success';
+
+/**
+ * @type {string}
+ * @const
+ */
+SESSION_RESTORE_FAILED = 'history-restore-failed';
 
 /**
  * @type {string}
@@ -253,6 +266,20 @@ Template.history.pageTitle = function() {
 };
 
 /**
+ * @return {string}
+ */
+Template.history.restoreError = function() {
+  return Session.get(SESSION_RESTORE_FAILED);
+};
+
+/**
+ * @return {boolean=}
+ */
+Template.history.hasRestoreSuccess = function() {
+  return Session.get(SESSION_RESTORE_SUCCESS);
+};
+
+/**
  * @return {Array}
  */
 Template.history.edits = function() {
@@ -326,9 +353,24 @@ Template.historicalEdit.data = function() {
     date: new Date(edit.ts).toLocaleString(),
     deleted: edit.deleted,
     comment: edit.comment,
-    formattedContent: edit.formattedContent
+    formattedContent: edit.formattedContent,
+    id: edit._id,
+    canRestore: canRestore(edit)
   };
 };
+
+/**
+ * @param {Object} edit
+ * @return {boolean}
+ */
+function canRestore(edit) {
+  var p;
+  if (edit.deleted) {
+    return false;
+  }
+  p = WikiPages.findOne(pageId());
+  return edit._id !== p.lastEditId;
+}
 
 /**
  * @return {number}
@@ -446,7 +488,46 @@ function handleHistoryInternalAction(event) {
   if (type === 'diff-previous' || type === 'diff-next') {
     handleHistoryDiffNavEvent(event);
   }
+  if (type === 'restore') {
+    handleRestoreNavEvent(event);
+  }
 };
+
+/**
+ * @param {Object} event
+ */
+function handleRestoreNavEvent(event) {
+  var id, name, edit;
+  id = $(event.target).attr('data-id');
+  edit = WikiEdits.findOne({_id: id});
+  if (!edit) {
+    return;
+  }
+  name = pageName();
+  if (name !== edit.pageName) {
+    return;
+  }
+  Meteor.call('edit', pageId(), name, edit.content, 'Reverted.',
+    _.partial(handleRestore, name));
+}
+
+/**
+ * @param {string} name
+ * @param {Object} error
+ * @param {Object} response
+ */
+function handleRestore(name, error, response) {
+  var msg;
+  if (error || !response || !response.success) {
+    Sessison.set(SESSION_RESTORE_SUCCESS, undefined);
+    msg = response.error || 'Failed to restore edit.';
+    Session.set(SESSION_RESTORE_FAILED, msg);
+  } else {
+    Session.set(SESSION_RESTORE_FAILED, undefined);
+    Session.set(SESSION_RESTORE_SUCCESS, true);
+  }
+  window.router.run('history', [name], [{}, 'history', name]);
+}
 
 /**
  * @param {Object} event

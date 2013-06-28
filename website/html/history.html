@@ -1,6 +1,16 @@
 <template name="history">
   <div class="history">
     <h1>{{pageTitle}}</h1>
+    {{#if hasRestoreError}}
+      <div class="alert alert-error">
+        {{restoreError}}
+      </div>
+    {{/if}}
+    {{#if hasRestoreSuccess}}
+      <div class="alert alert-success">
+        {{pageTitle}} has been restored to the selected edit.
+      </div>
+    {{/if}}
     <form id="history-compare-form">
       <table class="table table-striped">
         <thead>
@@ -178,6 +188,12 @@
               {{/with}}
               on
               {{date}}
+              {{#if canRestore}}
+              <small><a class="internal-action"
+                  data-id="{{id}}"
+                  data-action="restore"
+                  href="#">(restore)</a></small>
+              {{/if}}
             </div>
           </span>
         </div>

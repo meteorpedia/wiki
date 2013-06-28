@@ -107,6 +107,11 @@ function submitEdit(pageId, pageName, content, comment) {
     }
     page = WikiPages.findOne(pageId);
     edit.publishedBy = this.userId;
+    if (!edit.created) {
+      // Migration, this property did not used to exist.
+      edit.created = edit.ts;
+    }
+    edit.ts = ts;
     WikiEdits.update(edit._id, edit);
     page.lastUpdated = ts;
     page.lastEditId = edit._id;
@@ -121,6 +126,7 @@ function submitEdit(pageId, pageName, content, comment) {
     comment: comment,
     content: content,
     formattedContent: formattedContent,
+    created: ts,
     ts: ts
   }
   if (!pageId) {
