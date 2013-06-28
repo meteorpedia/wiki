@@ -39,18 +39,18 @@
             </div>
             <div class="row">
               <div class="span8">
-                  <small>
-                    By submitting this form you agree to license your
-                    contribution via the <a target="_blank"
-                      href="http://www.gnu.org/copyleft/fdl.html"
-                      >GNU Free Documentation License</a>.
-                  </small>
-                  <small>
-                    Please do not submit copyrighted content if you do not
-                    own the copyright. Do not submit content from books,
-                    other media and websites unless you have permission to do
-                    so. Leave a note in the discussion section if required.
-                  </small>
+                <small>
+                  By submitting this form you agree to license your
+                  contribution via the <a target="_blank"
+                    href="http://www.gnu.org/copyleft/fdl.html"
+                    >GNU Free Documentation License</a>.
+                </small>
+                <small>
+                  Please do not submit copyrighted content if you do not
+                  own the copyright. Do not submit content from books,
+                  other media and websites unless you have permission to do
+                  so. Leave a note in the discussion section if required.
+                </small>
               </div>
             </div>
           </div>
@@ -93,6 +93,16 @@ function helloWorld() {
           </div>
         </div>
       </form>
+      <div class="row well edit-delete-row">
+        <span class="span11 edit-delete">
+          Remove this page from the wiki.
+            <button id="edit-delete-button" class="btn btn-danger"
+              >Delete Page</button>
+            <label>Comment<br/>
+          <input type="text" id="edit-delete-comment-input"/>
+        </label>
+        </span>
+      </div>
   </div>
 </template>
 

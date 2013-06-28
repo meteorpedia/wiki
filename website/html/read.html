@@ -1,10 +1,18 @@
 <template name="read">
   <h1>{{pageTitle}}</h1>
   {{#if pageExists}}
-    {{#if hasFormattedContents}}
-      {{{lastEdit.formattedContent}}}
+    {{#if lastEdit.deleted }}
+      <div class="alert">
+        This page was deleted. You can
+        <a class="internal-link" data-name="{{pageName}}"
+          data-link="edit" href="/edit/{{pageName}}">recreate</a> it.
+      </div>
     {{else}}
-      {{lastEdit.content}}
+      {{#if hasFormattedContents}}
+        {{{lastEdit.formattedContent}}}
+      {{else}}
+        {{lastEdit.content}}
+      {{/if}}
     {{/if}}
   {{else}}
     <div class="alert">

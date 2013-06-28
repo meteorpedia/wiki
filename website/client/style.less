@@ -303,6 +303,13 @@
 
 // BEGIN WIKI LESS
 
+[class^="icon-"], [class*=" icon-"] {
+  background-image: url('/img/glyphicons-halflings.png');
+}
+.icon-large {
+  background-image: url('/img/glyphicons.png');
+}
+
 @z_plane_1: 10;
 @z_plane_2: 20;
 @z_plane_3: 30;
@@ -365,6 +372,25 @@ h4 {
   small {
     display: inline-block;
     margin: 20px;
+  }
+  .edit-delete-row {
+    margin-left: .1px;
+    .edit-delete {
+      display: inline-block;
+      text-align: center;
+      label {
+        display: block;
+        margin: 10px 0;
+        input {
+          width: 80%;
+        }
+      }
+      button {
+        display: block;
+        margin: 10px auto 0;
+        width: auto;
+      }
+    }
   }
 }
 .code {
@@ -535,4 +561,9 @@ h4 {
 .previous-diff-link {
   color: @grayLight;
   font-size: 90%;
+}
+.edit-link-deleted {
+  display: inline-block;
+  position: relative;
+  top: 3px;
 }

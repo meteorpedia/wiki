@@ -47,6 +47,9 @@
 </template>
 
 <template name="editLink">
+  {{#if deleted}}
+    <span class="edit-link-deleted icon icon-ban-circle"></span>
+  {{/if}}
   <a data-type="history" data-ts="{{ts}}" class="internal-link"
     href="/history/{{pageId}}/edit/{{ts}}">{{date}}</a>
   <a data-type="previous-history"
@@ -166,6 +169,9 @@
         <div class="row">
           <span class="historical-edit-header span10">
             <div class="span10 historical-edit-who">
+              {{#if deleted}}
+                <span class="edit-link-deleted icon icon-ban-circle"></span>
+              {{/if}}
               By
               {{#with author}}
                 {{> profileLink}}

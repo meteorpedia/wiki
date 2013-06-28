@@ -263,6 +263,7 @@ Template.history.edits = function() {
     userMap = Session.get(SESSION_HISTORY_USER_MAP) || {};
     data = {
       ts: edit.ts,
+      deleted: edit.deleted,
       pageId: pageName(),
       date: new Date(edit.ts).toLocaleString(),
       createdBy: profileInfo(edit.createdBy, userMap),
@@ -323,6 +324,7 @@ Template.historicalEdit.data = function() {
   return {
     author: profileInfo(edit.createdBy, userMap),
     date: new Date(edit.ts).toLocaleString(),
+    deleted: edit.deleted,
     comment: edit.comment,
     formattedContent: edit.formattedContent
   };
@@ -417,7 +419,12 @@ function getDiffNav(sessionKey, direction) {
     previous: result.previous ? result.previous.ts : null,
     next: result.next ? result.next.ts : null,
     who: profileInfo(edit.createdBy, userMap),
-    what: {ts: edit.ts, date: new Date(edit.ts).toLocaleString(), pageId: name},
+    what: {
+      ts: edit.ts,
+      date: new Date(edit.ts).toLocaleString(),
+      deleted: edit.deleted,
+      pageId: name
+    },
     direction: direction
   };
 }

@@ -13,6 +13,7 @@ MESSAGE_LIMIT = 300;
  */
 Meteor.methods({
   edit: submitEdit,
+  delete: submitDelete,
   talk: submitTalk,
   profile: submitProfile,
   talkProfiles: talkProfiles,
@@ -21,10 +22,56 @@ Meteor.methods({
 
 /**
  * @param {string} pageId
+ * @param {string} comment
+ * @return {Object}
+ */
+function submitDelete(pageId, comment) {
+  var hash, md5sum, edit, page, ts, content;
+  if(_.isNull(this.userId)) {
+    return {success: false, error: 'Not logged in.'};
+  }
+  content = '';
+  if (!_.isString(comment) || _.isEmpty(comment)) {
+    comment = 'No comment.';
+  }
+  if (!pageId) {
+    return {success: false, error: 'No page id given.'};
+  }
+  page = WikiPages.findOne(pageId);
+  if (!page) {
+    return {success: false, error: 'Attempted to delete a non-existing page.'};
+  }
+  ts = new Date().getTime();
+  md5sum = crypto.createHash('md5');
+  md5sum.update(content);
+  hash = md5sum.digest('hex');
+  edit = {
+    createdBy: this.userId,
+    publishedBy: this.userId,
+    hash: hash,
+    comment: comment,
+    content: content,
+    deleted: true,
+    formattedContent: content,
+    ts: ts
+  }
+  page.lastUpdated = ts;
+  WikiPages.update(page._id, page);
+  edit.pageId = page._id;
+  edit.pageName = page.name;
+  edit._id = WikiEdits.insert(edit);
+  page.lastEditId = edit._id;
+  page.lastUpdated = ts;
+  WikiPages.update(page._id, page);
+  return {success: true};
+}
+
+/**
+ * @param {string} pageId
  * @param {string} pageName
  * @param {string} content
  * @param {string} comment
- * @return {boolean}
+ * @return {Object}
  */
 function submitEdit(pageId, pageName, content, comment) {
   var hash, md5sum, edit, page, ts, formattedContent;
@@ -104,7 +151,7 @@ function submitEdit(pageId, pageName, content, comment) {
  * @param {string} pageId
  * @param {string} message
  * @param {string=} editId
- * @return {boolean}
+ * @return {Object}
  */
 function submitTalk(pageId, message, editId) {
   var page, msg, ts;
@@ -151,7 +198,7 @@ function submitTalk(pageId, message, editId) {
 /**
  * @param {string} profileName
  * @param {string} email
- * @return {boolean}
+ * @return {Object}
  */
 function submitProfile(profileName, email) {
   var user, profile;

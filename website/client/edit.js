@@ -115,7 +115,8 @@ Template.edit.lastEdit = function() {
 };
 
 Template.edit.events({
-  'submit form': handleSubmit
+  'submit form': handleSubmit,
+  'click #edit-delete-button': handleDelete
 });
 
 /**
@@ -155,4 +156,15 @@ function handleEditResponse(error, response) {
   }
   Session.set(SESSION_EDIT_ERROR, name);
   Session.set(SESSION_EDIT_ERROR_DESC_PREFIX + name, response.error);
+}
+
+/**
+ * @param {Object} event
+ */
+function handleDelete(event) {
+  var comment, id;
+  event.preventDefault();
+  comment = $('#edit-delete-comment-input').val();
+  id = pageId();
+  Meteor.call('delete', id, comment, handleEditResponse);
 }
