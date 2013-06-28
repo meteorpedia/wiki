@@ -1,0 +1,23 @@
+<template name="articles">
+  <div class="test">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Author</th>
+          <th>Last Edited</th>
+          <th>Created On</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each pages}}
+        <tr>
+          <td class="page"><a href="/view/{{name}}">{{name}}</a></td>
+          <td class="user"><a href="/profile/{{createdBy}}">{{author}}</a></td>
+          <td>{{lastEdit}}</td>
+          <td>{{creationDate}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+</template>
