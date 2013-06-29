@@ -2,13 +2,19 @@
   "meteor": {},
   "dependencies": {
     "basePackages": {
-      "marked": {}
+      "marked": {},
+      "extensions": {}
     },
     "packages": {
       "marked": {
         "git": "https://github.com/chuangbo/meteor-marked.git",
         "tag": "v0.2.8.2",
         "commit": "f5d9d6dbc013ad1bd568fa610eb4d8a479943f18"
+      },
+      "extensions": {
+        "git": "https://github.com/gadicohen/meteor-extensions.git",
+        "tag": "v0.0.3",
+        "commit": "943cfc84f946dc970a010be5ce32dc62e1178fed"
       }
     }
   }
