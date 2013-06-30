@@ -5,6 +5,9 @@ var activeViews, views, SITE_NAME;
  */
 activeViews = [Read, Edit, Talk, History, EditProfile, Profile, Articles];
 
+Extensions.registerHookType('activeViews', '0.1.0');
+activeViews = Extensions.runHookChain('activeViews', activeViews);
+
 /**
  * @type {Array}
  */

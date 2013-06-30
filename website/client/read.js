@@ -50,8 +50,9 @@ Template.read.lastEdit = function() {
   if (!p || !p.lastEditId) {
     return {};
   }
-  return WikiEdits.findOne(p.lastEditId);
+  return Extensions.runHookChain('render', WikiEdits.findOne(p.lastEditId));
 };
+Extensions.registerHookType('render', '0.1.0');
 
 /**
  * @return {boolean}
