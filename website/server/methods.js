@@ -87,9 +87,6 @@ function submitEdit(pageId, pageName, content, comment) {
       createdOn: ts
     };
     page._id = WikiPages.insert(page);
-  } else {
-    page.lastUpdated = ts;
-    WikiPages.update(page._id, page);
   }
   edit.pageId = page._id;
   edit.pageName = page.name;
