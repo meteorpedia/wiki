@@ -13,8 +13,8 @@
       },
       "extensions": {
         "git": "https://github.com/gadicohen/meteor-extensions.git",
-        "tag": "v0.0.4",
-        "commit": "7e136717f061f98dc7e4b1df98c8949a18ca0471"
+        "tag": "v0.0.5",
+        "commit": "f0c766225b67593c1520f4cd6a927a55b3dd3ffc"
       }
     }
   }
