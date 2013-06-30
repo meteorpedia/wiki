@@ -9,7 +9,6 @@ jquery
 underscore
 less
 force-ssl
-showdown
 accounts-base
 accounts-password
 handlebars

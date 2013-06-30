@@ -74,7 +74,7 @@ function submitDelete(pageId, comment) {
  * @return {Object}
  */
 function submitEdit(pageId, pageName, content, comment) {
-  var hash, md5sum, edit, page, ts, formattedContent;
+  var hash, md5sum, edit, page, ts, formattedContent, hookData;
   if(_.isNull(this.userId)) {
     return {success: false, error: 'Not logged in.'};
   }
@@ -140,18 +140,20 @@ function submitEdit(pageId, pageName, content, comment) {
       createdOn: ts
     };
     page._id = WikiPages.insert(page);
-  } else {
-    page.lastUpdated = ts;
-    WikiPages.update(page._id, page);
   }
   edit.pageId = page._id;
   edit.pageName = page.name;
+
+  hookData = Extensions.runHookChain('submitEdit', { edit: edit, page: page });
+  edit = hookData.edit; page = hookData.page;
+
   edit._id = WikiEdits.insert(edit);
   page.lastEditId = edit._id;
   page.lastUpdated = ts;
   WikiPages.update(page._id, page);
   return {success: true};
 }
+Extensions.registerHookType('submitEdit', '0.1.0');
 
 /**
  * @param {string} pageId
@@ -230,10 +232,13 @@ function submitProfile(profileName, email) {
  * @return {string}
  */
 function formatContent(content) {
-  return marked(content);
+  return Extensions.runHookChain('formatContentPostMD',
+    marked(Extensions.runHookChain('formatContentPreMD', content)));
 }
+Extensions.registerHookType('formatContentPreMD', '0.1.0');
+Extensions.registerHookType('formatContentPostMD', '0.1.0');
 
-/**
+/*
  * @param {string} pageId
  * @return {Object}
  */
