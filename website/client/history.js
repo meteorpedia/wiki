@@ -325,7 +325,21 @@ Template.history.isTo = function (ts, options) {
 };
 
 Template.history.events({
-  'click a.internal-link': handleHistoryInternalLink,
+  // quick fix, need to integrate this properly
+  'click a.internal-profile-link': function(event) {
+    var el, user_id;
+    event.preventDefault();
+
+    el = $(event.target);
+    userId = el.data('id');
+
+    window.router.run('profile', [userId],
+      [{}, 'profile', userId]);
+  },  
+  'click a.internal-link': function(event) {
+    if (!$(event.target).hasClass('internal-profile-link'))
+          handleHistoryInternalLink(event);
+  },
   'submit #history-compare-form': handleCompareSubmit,
   'change input.to-input': handleToChange,
   'change input.from-input': handleFromChange

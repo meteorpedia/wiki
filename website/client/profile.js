@@ -39,8 +39,8 @@ PP.name = 'profile';
  * @protected
  * @return {string}
  */
-PP.pathGenerator_ = function() {
-  return [this.name].join('/');
+PP.pathGenerator_ = function(profileId) {
+  return [this.name, profileId].join('/');
 };
 
 /**
