@@ -165,6 +165,11 @@ Template.main.loading = function() {
  */
 RP.handlePop_ = function(event) {
   var state, route, path, paths, routeName, args;
+
+  // See "Note-1" below why we need this
+  if (event.state === null && hasPoppedEver) return;
+  if (!hasPoppedEver) hasPoppedEver = true;
+
   state = event.state || {};
   path = window.location.pathname || '';
   path = path.substr(1);
@@ -206,3 +211,25 @@ function stopLoading_() {
   Session.set(SESSION_LOADING, false);
 }
 stopLoading = stopLoading_;
+
+/*
+ * Note-1
+ *
+ * As per https://developer.mozilla.org/en-US/docs/Web/API/window.onpopstate:
+ * Browsers tend to handle the popstate event differently on page load.
+ * Chrome and Safari always emit a popstate event on page load, but Firefox doesn't.
+ *
+ * We do the little hackery below to correctly route to the first page in Firefox:
+ *
+ * 1) Keep track of whether or not we've ever had a popstate event before
+ * 2) Manually call handlePop_ on page load, but ensure it doesn't run twice.
+ *    CONSEQUENTLY ANY OTHER EVENTS WITH event.state=null WILL BE IGNORED.
+ *    That's fine for the default behaviour of the router, but be aware of it.
+ */
+var hasPoppedEver = false;
+var oldOnLoad = window.onload;
+window.onload = function(event) {
+  event.state = null;
+  window.router.handlePop_(event);
+  history.replaceState({}, '', location.href);
+}
