@@ -151,9 +151,12 @@ function submitEdit(pageId, pageName, content, comment) {
   page.lastEditId = edit._id;
   page.lastUpdated = ts;
   WikiPages.update(page._id, page);
+
+  Extensions.runHooks('submitEditAfter', { edit: edit, page: page });
   return {success: true};
 }
 Extensions.registerHookType('submitEdit', '0.1.0');
+Extensions.registerHookType('submitEditAfter', '0.1.0');
 
 /**
  * @param {string} pageId

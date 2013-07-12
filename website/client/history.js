@@ -342,12 +342,17 @@ Template.historicalEdit.showHistoricalEdit = function() {
  * @return {string}
  */
 Template.historicalEdit.data = function() {
-  var edit, userMap;
+  var edit, userMap, page;
   userMap = Session.get(SESSION_HISTORY_USER_MAP) || {};
   edit = WikiEdits.findOne({ts: Session.get(SESSION_HISTORY_TS)});
   if (!edit) {
     return {formattedContent: 'Not found.'};
   }
+
+  page = WikiPages.findOne({name: edit.pageName});
+  edit = Extensions.runHookChain('render',
+    { edit: edit, page: page }).edit;
+
   return {
     author: profileInfo(edit.createdBy, userMap),
     date: new Date(edit.ts).toLocaleString(),
@@ -358,6 +363,7 @@ Template.historicalEdit.data = function() {
     canRestore: canRestore(edit)
   };
 };
+// Extensions.registerHookType('render', '1.0.0') in read.js
 
 /**
  * @param {Object} edit

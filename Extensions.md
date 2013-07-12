@@ -41,17 +41,27 @@ Meteorpedia uses the [meteor-extensions](https://github.com/gadicohen/meteor-ext
 
 ### Available hooks
 
+#### client/read.js
+
 render - change the page object before rendering on client
+* (1.0) func({ edit: edit, page: page }) must return { edit: edit, page: page }
 * (0.1) func(edit), must return edit
+
+#### server/methods.js
 
 submitEdit - change to use/change edit/page data just before database update
 * (0.1) func({ edit: edit, page: page }) must return { edit: edit, page: page }
+
+submitEditAfter - run after the edit has been saved to the database
+* (0.1) func({ edut: edit, page, page })
 
 formatContentPreMD - format content before markdown
 * (0.1) func(content), must return (modified) content
 
 formatContentPostMD - format content post markdown
 * (0.1) func(content), must return (modified) content
+
+#### client/main.js
 
 activeViews - needed to add new View keywords, e.g. /special/Categories
 * (0.1) func(activeViews), must return activeViews

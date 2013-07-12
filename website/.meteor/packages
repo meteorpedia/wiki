@@ -8,8 +8,6 @@ accounts-ui
 jquery
 underscore
 less
-force-ssl
 accounts-base
 accounts-password
 handlebars
-spiderable

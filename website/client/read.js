@@ -45,14 +45,15 @@ Read = Read_;
  * @return {Object}
  */
 Template.read.lastEdit = function() {
-  var p;
+  var p, data;
   p = WikiPages.findOne(pageId());
   if (!p || !p.lastEditId) {
     return {};
   }
-  return Extensions.runHookChain('render', WikiEdits.findOne(p.lastEditId));
+  data = { page: p, edit: WikiEdits.findOne(p.lastEditId) };
+  return Extensions.runHookChain('render', data).edit;
 };
-Extensions.registerHookType('render', '0.1.0');
+Extensions.registerHookType('render', '1.0.0');
 
 /**
  * @return {boolean}
