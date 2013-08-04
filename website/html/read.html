@@ -1,24 +1,28 @@
 <template name="read">
-  <h1>{{pageTitle}}</h1>
-  {{#if pageExists}}
-    {{#if lastEdit.deleted }}
-      <div class="alert">
-        This page was deleted. You can
-        <a class="internal-link" data-name="{{pageName}}"
-          data-link="edit" href="/edit/{{pageName}}">recreate</a> it.
-      </div>
-    {{else}}
-      {{#if hasFormattedContents}}
-        {{{lastEdit.formattedContent}}}
-      {{else}}
-        {{lastEdit.content}}
-      {{/if}}
-    {{/if}}
+  {{#if loading}}
+    {{> loading}}
   {{else}}
-    <div class="alert">
-      This page does not exist, but you can
-      <a class="internal-link" data-name="{{pageName}}"
-        data-link="edit" href="/edit/{{pageName}}">create</a> it.
-    </div>
+    <h1>{{pageTitle}}</h1>
+    {{#if pageExists}}
+      {{#if lastEdit.deleted }}
+        <div class="alert">
+          This page was deleted. You can
+          <a class="internal-link" data-name="{{pageName}}"
+            data-link="edit" href="/edit/{{pageName}}">recreate</a> it.
+        </div>
+      {{else}}
+        {{#if hasFormattedContents}}
+          {{{lastEdit.formattedContent}}}
+        {{else}}
+          {{lastEdit.content}}
+        {{/if}}
+      {{/if}}
+    {{else}}
+      <div class="alert">
+        This page does not exist, but you can
+        <a class="internal-link" data-name="{{pageName}}"
+          data-link="edit" href="/edit/{{pageName}}">create</a> it.
+      </div>
+    {{/if}}
   {{/if}}
 </template>

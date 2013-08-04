@@ -1,59 +1,63 @@
 <template name="history">
-  <div class="history">
-    <h1>{{pageTitle}}</h1>
-    {{#if hasRestoreError}}
-      <div class="alert alert-error">
-        {{restoreError}}
-      </div>
-    {{/if}}
-    {{#if hasRestoreSuccess}}
-      <div class="alert alert-success">
-        {{pageTitle}} has been restored to the selected edit.
-      </div>
-    {{/if}}
-    <form id="history-compare-form">
-      <table class="table table-striped">
-        <thead>
-          <th colspan="2">Compare</th>
-          <th>Date</th>
-          <th>Created by</th>
-          <th>Published by</th>
-          <th>Comment</th>
-        </thead>
-        <tbody>
-          {{#each edits}}
-            <tr>
-              <td>
-              {{#isFrom ts}}
-                <input class="from-input" type="radio" name="from"
-                data-ts="{{../ts}}" checked="checked" />
-              {{else}}
-                <input class="from-input" type="radio" name="from"
-                  data-ts="{{../ts}}"/>
-              {{/isFrom}}
-              </td>
-              <td>
-              {{#isTo ts}}
-                <input class="to-input" type="radio" name="to"
-                data-ts="{{../ts}}" checked="checked" />
-              {{else}}
-                <input class="to-input" type="radio" name="to"
-                 data-ts="{{../ts}}" />
-              {{/isTo}}
-              </td>
-              <td>{{> editLink}}</td>
-              <td>{{#with createdBy}}{{> profileLink}}{{/with}}</td>
-              <td>{{#with publishedBy}}{{> profileLink}}{{/with}}</td>
-              <td>{{comment}}</td>
-            </tr>
-          {{/each}}
-        </tbody>
-      </table>
-      <button class="btn">Compare</button>
-    </form>
-  </div>
-  {{> historicalEdit}}
-  {{> historicalDiff}}
+  {{#if loading}}
+    {{> loading}}
+  {{else}}
+    <div class="history">
+      <h1>{{pageTitle}}</h1>
+      {{#if hasRestoreError}}
+        <div class="alert alert-error">
+          {{restoreError}}
+        </div>
+      {{/if}}
+      {{#if hasRestoreSuccess}}
+        <div class="alert alert-success">
+          {{pageTitle}} has been restored to the selected edit.
+        </div>
+      {{/if}}
+      <form id="history-compare-form">
+        <table class="table table-striped">
+          <thead>
+            <th colspan="2">Compare</th>
+            <th>Date</th>
+            <th>Created by</th>
+            <th>Published by</th>
+            <th>Comment</th>
+          </thead>
+          <tbody>
+            {{#each edits}}
+              <tr>
+                <td>
+                {{#isFrom ts}}
+                  <input class="from-input" type="radio" name="from"
+                  data-ts="{{../ts}}" checked="checked" />
+                {{else}}
+                  <input class="from-input" type="radio" name="from"
+                    data-ts="{{../ts}}"/>
+                {{/isFrom}}
+                </td>
+                <td>
+                {{#isTo ts}}
+                  <input class="to-input" type="radio" name="to"
+                  data-ts="{{../ts}}" checked="checked" />
+                {{else}}
+                  <input class="to-input" type="radio" name="to"
+                   data-ts="{{../ts}}" />
+                {{/isTo}}
+                </td>
+                <td>{{> editLink}}</td>
+                <td>{{#with createdBy}}{{> profileLink}}{{/with}}</td>
+                <td>{{#with publishedBy}}{{> profileLink}}{{/with}}</td>
+                <td>{{comment}}</td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+        <button class="btn">Compare</button>
+      </form>
+    </div>
+    {{> historicalEdit}}
+    {{> historicalDiff}}
+  {{/if}}
 </template>
 
 <template name="editLink">

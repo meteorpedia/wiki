@@ -1,21 +1,25 @@
 <template name="profile">
-  <div class="profile">
-    {{#with user}}
-      <h1>{{> profileLink}}<h1>
-    {{/with}}
-  </div>
-  <div class="row">
-    <span class="span6">
-      {{#with edits}}
-        {{> profileItems}}
+  {{#if loading}}
+    {{> loading}}
+  {{else}}
+    <div class="profile">
+      {{#with user}}
+        <h1>{{> profileLink}}<h1>
       {{/with}}
-    </span>
-    <span class="span6">
-      {{#with messages}}
-        {{> profileItems}}
-      {{/with}}
-    </span>
-  </div>
+    </div>
+    <div class="row">
+      <span class="span6">
+        {{#with edits}}
+          {{> profileItems}}
+        {{/with}}
+      </span>
+      <span class="span6">
+        {{#with messages}}
+          {{> profileItems}}
+        {{/with}}
+      </span>
+    </div>
+  {{/if}}
 </template>
 
 <template name="profileItems">
