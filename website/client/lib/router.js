@@ -3,6 +3,8 @@
  */
 
 var routes, RP, history, ROUTE_SESSION_KEY, SESSION_LOADING;
+//var loaders = [];  // stack of loading functions
+loaders = [];
 
 /**
  * @type {string}
@@ -155,9 +157,15 @@ Template.main.content = function() {
 /**
  * @return {boolean}
  */
-Template.main.loading = function() {
-  return !!Session.get(SESSION_LOADING);
-};
+Handlebars.registerHelper('loading', function() {
+  var loading = false;
+  for (sub in allSubs) {
+    if (!allSubs[sub].ready()) {
+      loading = true;
+    }
+  }
+  return loading;
+});
 
 /**
  * @param {Object} event
@@ -194,23 +202,6 @@ RP.handlePop_ = function(event) {
 
 
 Router = Router_;
-
-/**
- * Show loading icon. Debounced and and implements a pause after stop
- * loading to prevent flickering.
- */
-function loading_() {
-  Session.set(SESSION_LOADING, true);
-}
-loading = loading_;
-
-/**
- * Stop showing loading icon. Always stops.
- */
-function stopLoading_() {
-  Session.set(SESSION_LOADING, false);
-}
-stopLoading = stopLoading_;
 
 /*
  * Note-1

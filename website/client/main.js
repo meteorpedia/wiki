@@ -31,17 +31,19 @@ Deps.autorun(function() {
   document.title = [formattedPageName(), '-', SITE_NAME].join(' ');
 });
 
+allSubs = {};
+
 Deps.autorun(function() {
-  loading();
-  Meteor.subscribe('currentPage', pageName(), stopLoading);
+  allSubs.currentPage = Meteor.subscribe('currentPage', pageName());
 });
 Deps.autorun(function() {
-  loading();
-  Meteor.subscribe('recentEdits', pageId(), stopLoading);
+  var limit = (pageType() == 'history') ? null : 1;  // null = use server default 
+  allSubs.recentEdits = Meteor.subscribe('recentEdits', pageId(), limit);
 });
 Deps.autorun(function() {
-  loading();
-  Meteor.subscribe('recentMessages', pageId(), stopLoading);
+// TODO, move to talk page, send minimal data over wire until talk page opened, etc.
+//  if (pageType() == 'talk')
+  allSubs.recentMessages = Meteor.subscribe('recentMessages', pageId());
 });
 
 Meteor.startup(function() {
