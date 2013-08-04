@@ -13,3 +13,9 @@ logs
 results
 
 npm-debug.log
+
+website/deploy
+website/server/mailgun.js
+website/html/google.html
+
+
