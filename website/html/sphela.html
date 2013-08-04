@@ -28,6 +28,7 @@
 
 <template name="pageMenu">
   <ul class="nav page-menu">
+    {{#isolate}}
     {{#if isPage}}
       <li class="{{#if isRead}}active{{/if}}">
       <a data-link="read" data-name="{{pageName}}" class="internal-link"
@@ -43,9 +44,10 @@
       </li>
       <li class="{{#if isTalk}}active{{/if}}">
       <a data-link="talk" data-name="{{pageName}}" class="internal-link"
-        href="/talk/{{pageName}}">Discuss</a>
+        href="/talk/{{pageName}}">Discuss{{#if talkCount}} ({{talkCount}}){{/if}}</a>
       </li>
     {{/if}}
+    {{/isolate}}
     <li class="{{#if isProfile}}active{{/if}}">
     <a data-link="edit-profile" class="edit-profile-link"
       href="/edit_profile">Profile</a>
@@ -61,11 +63,11 @@
   <div id="footer" class="well muted">
     <div class="container">
         <ul class="nav footer-nav">
-          <li>Meteorpedia is Open Source Softare and not affiliated with Meteor.</li>
+          <li>Meteorpedia is Open Source Software and not affiliated with Meteor.</li>
           <li><a href="https://github.com/meteorpedia/wiki">Source on GitHub</a></li>
-          <li>All content is published via the <a
-            href="http://www.gnu.org/copyleft/fdl.html"
-            >GNU Free Documentation License</a></li>
+          <li>All content is published via the <a target="_blank"
+            href="http://creativecommons.org/licenses/by-sa/3.0/"
+            >Creative Commons Attribution-ShareAlike License</a></li>
         </ul>
       </div>
     </div>
@@ -82,12 +84,23 @@
   <div class="modal-blackout"></div>
 </template>
 
+<body>
+  <style type="text/css">
+    #main-loading.load-hidden {
+      z-Index: -1000;
+    }
+    #main-loading.load-hidden img {
+      visibility: hidden;
+    }
+  </style>
+</body>
+
 <template name="main">
-  {{#if loading}}
-    <div id="main-loading">
-      <img src="/img/loading.gif" />
-    </div>
-  {{else}}
-    {{{content}}}
-  {{/if}}
+  {{{content}}}
+</template>
+
+<template name="loading">
+  <div id="main-loading">
+    <img src="/img/loading.gif" class="load-hidden"/>
+  </div>
 </template>
