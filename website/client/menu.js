@@ -76,4 +76,6 @@ Template.pageMenu.isTalk = function() {
   return pageType() === 'talk';
 };
 
-
+Template.pageMenu.talkCount = function() {
+  return WikiMessages.find({pageId: pageId()}).count();
+}
