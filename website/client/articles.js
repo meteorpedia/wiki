@@ -8,7 +8,7 @@ Articles.prototype = _.clone(View);
 AA = Articles.prototype;
 
 Deps.autorun(function () {
-  Meteor.subscribe('arty');
+  //Meteor.subscribe('arty');
 })
 
 AA.name = 'articles';
