@@ -1,61 +1,65 @@
 <template name="talk">
-  <div class="talk">
-    <h1>{{pageTitle}}</h1>
-    {{#if hasError}}
-    <div class="alert alert-error">
-      {{error}}
-    </div>
-    {{/if}}
-    <div class="row">
-      <div class="span5">
-        <form class="well" id="message-form">
-          <h3>Leave a message</h3>
-          <div>
-            <textarea id="discuss-message-textarea" class="span4"
-              tabindex="1">{{message.contents}}</textarea>
-          </div>
-          <div>
-            <input class="btn btn-success" type="submit" name="Post"
-              tabindex="2"/>
-          </div>
-          <div>
-            <small>
-              Comments can be formatted with Github flavored markdown.
-            </small>
-          </div>
-        </form>
+  {{#if loading}}
+    {{> loading}}
+  {{else}}
+    <div class="talk">
+      <h1>{{pageTitle}}</h1>
+      {{#if hasError}}
+      <div class="alert alert-error">
+        {{error}}
       </div>
-      <div class="span7">
-        <div class="messageHeader">
-          <h3>Previous messages</h3>
+      {{/if}}
+      <div class="row">
+        <div class="span5">
+          <form class="well" id="message-form">
+            <h3>Leave a message</h3>
+            <div>
+              <textarea id="discuss-message-textarea" class="span4"
+                tabindex="1">{{message.contents}}</textarea>
+            </div>
+            <div>
+              <input class="btn btn-success" type="submit" name="Post"
+                tabindex="2"/>
+            </div>
+            <div>
+              <small>
+                Comments can be formatted with Github flavored markdown.
+              </small>
+            </div>
+          </form>
         </div>
-        <div class="messages">
-          {{#each messages}}
-            <div class="row message">
-              <div class="span7">
-                <div class="row message-content">
-                  <div class="span7">
-                    {{{formattedContent}}}
+        <div class="span7">
+          <div class="messageHeader">
+            <h3>Previous messages</h3>
+          </div>
+          <div class="messages">
+            {{#each messages}}
+              <div class="row message">
+                <div class="span7">
+                  <div class="row message-content">
+                    <div class="span7">
+                      {{{formattedContent}}}
+                    </div>
                   </div>
-                </div>
-                <div class="row message-data">
-                  <div class="span3">
-                    {{created}}
-                  </div>
-                  <div class="span4">
-                    {{> profileLink}}
+                  <div class="row message-data">
+                    <div class="span3">
+                      {{created}}
+                    </div>
+                    <div class="span4">
+                      {{> profileLink}}
+                    </div>
                   </div>
                 </div>
               </div>
+            {{else}}
+            <div class="row no-messages">
+            <p class="span4">No messages.</p>
             </div>
-          {{else}}
-          <div class="row no-messages">
-          <p class="span4">No messages.</p>
+            {{/each}}
           </div>
-          {{/each}}
         </div>
       </div>
     </div>
-  </div>
+  {{/if}}
 </template>
 
