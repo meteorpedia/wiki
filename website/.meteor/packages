@@ -11,3 +11,7 @@ less
 accounts-base
 accounts-password
 handlebars
+accounts-github
+accounts-google
+accounts-facebook
+accounts-twitter
