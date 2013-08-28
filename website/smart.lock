@@ -2,7 +2,6 @@
   "meteor": {},
   "dependencies": {
     "basePackages": {
-      "marked": {},
       "extensions": {},
       "offline-data": {},
       "spiderable-remote": {},
@@ -11,11 +10,6 @@
       }
     },
     "packages": {
-      "marked": {
-        "git": "https://github.com/chuangbo/meteor-marked.git",
-        "tag": "v0.2.9",
-        "commit": "6485d6f03841501f81176e34ab375840473aa714"
-      },
       "extensions": {
         "git": "https://github.com/gadicohen/meteor-extensions.git",
         "tag": "v0.0.7",

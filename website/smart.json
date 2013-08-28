@@ -1,6 +1,5 @@
 {
   "packages": {
-    "marked": {},
     "extensions": { },
     "offline-data": {},
     "spiderable-remote": { },

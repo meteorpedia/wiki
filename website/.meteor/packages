@@ -18,6 +18,7 @@ accounts-facebook
 accounts-twitter
 standard-app-packages
 diff
+sp-marked
 sitemaps
 highlight
 browser-msg
@@ -31,4 +32,4 @@ offline-data
 robots-txt
 spiderable-remote
 extensions
-sp-marked
+

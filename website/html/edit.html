@@ -20,10 +20,12 @@
             <div class="span8 edit-column">
               <div class="row">
                 <div class="span8">
+                  {{#constant}}
                   <textarea tabindex="1" id="edit-contents"
                     {{#if cantEdit}}disabled="disabled"{{/if}}
                     class="edit-form-control edit-contents-textarea span8"
                     >{{lastEdit.content}}</textarea>
+                  {{/constant}}
                 </div>
               </div>
               <div class="row">
