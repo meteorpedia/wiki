@@ -1,3 +1,16 @@
 marked
 extensions
 meteorpedia-mediawiki
+isolate-value
+offline-data
+offline-common
+browser-msg
+canonical-stringify
+spiderable-remote
+sitemaps
+robots-txt
+variable
+useragent
+SyntaxHighlighter
+handlebar-helpers
+sp-marked

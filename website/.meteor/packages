@@ -3,6 +3,7 @@
 # 'meteor add' and 'meteor remove' will edit this file for you,
 # but you can also edit it by hand.
 
+standard-app-packages
 preserve-inputs
 accounts-ui
 jquery
@@ -15,3 +16,19 @@ accounts-github
 accounts-google
 accounts-facebook
 accounts-twitter
+standard-app-packages
+diff
+sitemaps
+highlight
+browser-msg
+handlebar-helpers
+canonical-stringify
+offline-common
+SyntaxHighlighter
+isolate-value
+meteorpedia-mediawiki
+offline-data
+robots-txt
+spiderable-remote
+extensions
+sp-marked
