@@ -1,1 +1,4 @@
 /* CSS declarations go here */
+
+body { overflow-y: scroll; }
+ul.nav.page-menu li { height: 3em; }

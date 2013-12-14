@@ -44,3 +44,9 @@ function startPublish() {
   });
 
 }
+
+robots.addLine('User-agent: *');
+robots.addLine('Disallow: /talk/');
+robots.addLine('Disallow: /edit/');
+robots.addLine('Disallow: /history/');
+robots.addLine('Disallow: /profile/');

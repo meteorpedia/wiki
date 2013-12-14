@@ -17,21 +17,21 @@
       },
       "offline-data": {
         "git": "https://github.com/awwx/meteor-offline-data.git",
-        "tag": "v0.1.1",
-        "commit": "f861f86222038de0ec54b483644600fef3f5a993"
+        "tag": "v0.1.2",
+        "commit": "aecbcd94ee5ff586f9761054fe8a2d059f10de4f"
       },
       "spiderable-remote": {
         "git": "https://github.com/gadicohen/meteor-spiderable-remote.git",
-        "tag": "v0.0.6",
-        "commit": "4bb6fa3870ecbcc9024f0ebb8f020323f55b19e1"
+        "tag": "v0.0.7",
+        "commit": "92f8db5f90dc7def369e5a6e5842a1727ad44fb6"
       },
       "meteorpedia-mediawiki": {
         "path": "../../../smart/meteorpedia-mediawiki"
       },
       "offline-common": {
         "git": "https://github.com/awwx/meteor-offline-common.git",
-        "tag": "v0.1.1",
-        "commit": "27dcdb6604304fb8e566b7cdb179b6b1cc0b2011"
+        "tag": "v0.1.2",
+        "commit": "893e43234eb7a9a6999adb03957aa8196e783fdd"
       },
       "isolate-value": {
         "git": "https://github.com/awwx/meteor-isolate-value.git",
@@ -55,8 +55,8 @@
       },
       "sitemaps": {
         "git": "https://github.com/gadicohen/meteor-sitemaps.git",
-        "tag": "v0.0.10",
-        "commit": "baa67101ccb16de5ed657cb0c4c9794e9f9a9b79"
+        "tag": "v0.0.12",
+        "commit": "e94f3ddc8bf734028160c878be6a040fb749c65f"
       },
       "browser-msg": {
         "git": "https://github.com/awwx/meteor-browser-msg.git",
@@ -70,8 +70,8 @@
       },
       "robots-txt": {
         "git": "https://github.com/gadicohen/meteor-robots.txt.git",
-        "tag": "v0.0.5",
-        "commit": "3ee590085638cfacab0b97992e3cca3835764f01"
+        "tag": "v0.0.8",
+        "commit": "dc1be195b8c0cf7d6263235484218911e1bf27d9"
       },
       "useragent": {
         "git": "https://github.com/awwx/meteor-useragent.git",
