@@ -1,9 +1,6 @@
 marked
 extensions
-meteorpedia-mediawiki
 isolate-value
-offline-data
-offline-common
 browser-msg
 canonical-stringify
 spiderable-remote

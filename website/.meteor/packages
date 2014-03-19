@@ -24,12 +24,8 @@ highlight
 browser-msg
 handlebar-helpers
 canonical-stringify
-offline-common
 SyntaxHighlighter
 isolate-value
-meteorpedia-mediawiki
-offline-data
 robots-txt
 spiderable-remote
 extensions
-

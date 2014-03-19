@@ -3,11 +3,7 @@
   "dependencies": {
     "basePackages": {
       "extensions": {},
-      "offline-data": {},
-      "spiderable-remote": {},
-      "meteorpedia-mediawiki": {
-        "path": "../../../smart/meteorpedia-mediawiki"
-      }
+      "spiderable-remote": {}
     },
     "packages": {
       "extensions": {
@@ -15,68 +11,10 @@
         "tag": "v0.0.7",
         "commit": "fe931b4efdffeab8dcad5e9668812cd631cf3a58"
       },
-      "offline-data": {
-        "git": "https://github.com/awwx/meteor-offline-data.git",
-        "tag": "v0.1.2",
-        "commit": "aecbcd94ee5ff586f9761054fe8a2d059f10de4f"
-      },
       "spiderable-remote": {
         "git": "https://github.com/gadicohen/meteor-spiderable-remote.git",
         "tag": "v0.0.7",
         "commit": "92f8db5f90dc7def369e5a6e5842a1727ad44fb6"
-      },
-      "meteorpedia-mediawiki": {
-        "path": "../../../smart/meteorpedia-mediawiki"
-      },
-      "offline-common": {
-        "git": "https://github.com/awwx/meteor-offline-common.git",
-        "tag": "v0.1.2",
-        "commit": "893e43234eb7a9a6999adb03957aa8196e783fdd"
-      },
-      "isolate-value": {
-        "git": "https://github.com/awwx/meteor-isolate-value.git",
-        "tag": "v2.0.2",
-        "commit": "6b8600b29190073fa3785b48b028f113edfdffc2"
-      },
-      "variable": {
-        "git": "https://github.com/awwx/meteor-variable.git",
-        "tag": "v1.0.0",
-        "commit": "3e7cae3cc6fbc8cab9d95b88b0d3d758ecd341da"
-      },
-      "SyntaxHighlighter": {
-        "git": "https://github.com/gadicohen/meteor-SyntaxHighlighter.git",
-        "tag": "v0.0.2",
-        "commit": "00a1aac6c09f92cef01837fdf921d0096645266d"
-      },
-      "handlebar-helpers": {
-        "git": "https://github.com/raix/Meteor-handlebar-helpers.git",
-        "tag": "v0.0.9",
-        "commit": "71e94c99462b8801a34c5363510758b6ff5f5ac7"
-      },
-      "sitemaps": {
-        "git": "https://github.com/gadicohen/meteor-sitemaps.git",
-        "tag": "v0.0.12",
-        "commit": "e94f3ddc8bf734028160c878be6a040fb749c65f"
-      },
-      "browser-msg": {
-        "git": "https://github.com/awwx/meteor-browser-msg.git",
-        "tag": "v1.1.0",
-        "commit": "1122730ca4229a3de09c40205ce7161fd9bed045"
-      },
-      "canonical-stringify": {
-        "git": "https://github.com/awwx/meteor-canonical-stringify.git",
-        "tag": "v1.3",
-        "commit": "f38e2c05bec97a501924f313846f5c95f70bb2c2"
-      },
-      "robots-txt": {
-        "git": "https://github.com/gadicohen/meteor-robots.txt.git",
-        "tag": "v0.0.8",
-        "commit": "dc1be195b8c0cf7d6263235484218911e1bf27d9"
-      },
-      "useragent": {
-        "git": "https://github.com/awwx/meteor-useragent.git",
-        "tag": "v0.0.2",
-        "commit": "8737222105a50cfe484ccd09728bdfa7c35288a2"
       }
     }
   }

@@ -1,0 +1,3 @@
+[submodule "website/packages/meteorpedia-mediawiki"]
+	path = website/packages/meteorpedia-mediawiki
+	url = https://github.com/meteorpedia/meteorpedia-mediawiki.git

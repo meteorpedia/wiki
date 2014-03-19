@@ -1,10 +1,6 @@
 {
   "packages": {
-    "extensions": { },
-    "offline-data": {},
-    "spiderable-remote": { },
-    "meteorpedia-mediawiki": {
-	"path": "/home/dragon/www/smart/meteorpedia-mediawiki"
-    }
+    "extensions": {},
+    "spiderable-remote": {}
   }
 }
